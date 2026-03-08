@@ -58,7 +58,7 @@ export function Navbar() {
                           <span className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-snug">Passaggi dettagliati per iniziare</span>
                         </div>
                       </Link>
-                      <Link to="/docs" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 p-2 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group/item">
+                      <Link to="/docs" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 p-2 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors group/item">
                         <div className="flex items-center justify-center w-8 h-8 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 group-hover/item:text-zinc-900 dark:group-hover/item:text-zinc-50 transition-colors shrink-0">
                           <Book className="w-4 h-4" />
                         </div>
@@ -91,7 +91,7 @@ export function Navbar() {
                 <div className="mx-auto w-full max-w-5xl px-4 sm:px-8 py-6">
                   <div className="grid grid-cols-3 gap-8">
                     <div className="flex flex-col gap-2">
-                      <Link to="/store" className="flex items-start gap-3 p-2 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group/item">
+                      <Link to="/store" className="flex items-start gap-3 p-2 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors group/item">
                         <div className="flex items-center justify-center w-8 h-8 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 group-hover/item:text-zinc-900 dark:group-hover/item:text-zinc-50 transition-colors shrink-0">
                           <Cpu className="w-4 h-4" />
                         </div>

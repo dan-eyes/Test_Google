@@ -52,7 +52,7 @@ export function DocsSidebar({ className }: { className?: string }) {
                           className={cn(
                             "block w-full px-4 py-1.5 text-[13px] transition-colors break-words leading-snug",
                             isActive
-                              ? "bg-white dark:bg-[#111111] text-blue-600 dark:text-white font-medium shadow-sm border border-zinc-200/50 dark:border-zinc-800/80"
+                              ? "bg-white dark:bg-[#18181B] text-blue-600 dark:text-white font-medium shadow-sm border border-zinc-200/50 dark:border-zinc-700/80"
                               : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200/50 dark:hover:bg-white/[0.05] hover:text-zinc-900 dark:hover:text-white"
                           )}
                         >
@@ -65,7 +65,7 @@ export function DocsSidebar({ className }: { className?: string }) {
               </div>
 
               {idx < docsData.length - 1 && (
-                <div className="mt-4 mx-4 border-b border-dotted border-zinc-300 dark:border-zinc-800" />
+                <div className="mt-4 mx-4 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
               )}
             </div>
           )

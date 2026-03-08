@@ -26,7 +26,20 @@ import { DashboardGiftCards } from "@/pages/dashboard/gift-cards"
 import { DashboardPricing } from "@/pages/dashboard/pricing"
 import { DashboardSettings } from "@/pages/dashboard/settings"
 import { VendorLayout } from "@/components/layouts/vendor-layout"
-import { VendorOverview } from "@/pages/vendor/vendor-overview"
+import { VendorDashboard } from "@/pages/vendor/dashboard"
+import { VendorOrders } from "@/pages/vendor/orders"
+import { VendorProducts } from "@/pages/vendor/products"
+import { VendorCollections } from "@/pages/vendor/collections"
+import { VendorCategories } from "@/pages/vendor/categories"
+import { VendorImports } from "@/pages/vendor/imports"
+import { VendorInventory } from "@/pages/vendor/inventory"
+import { VendorCustomers } from "@/pages/vendor/customers"
+import { VendorPromotions } from "@/pages/vendor/promotions"
+import { VendorPriceLists } from "@/pages/vendor/price-lists"
+import { VendorRequests } from "@/pages/vendor/requests"
+import { VendorSettings } from "@/pages/vendor/settings"
+import { VendorConnect } from "@/pages/vendor/connect"
+import { VendorExtensions } from "@/pages/vendor/extensions"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
 
 import { ThemeProvider } from "@/components/ui/theme-provider"
@@ -148,7 +161,85 @@ const vendorLayoutRoute = createRoute({
 const vendorOverviewRoute = createRoute({
   getParentRoute: () => vendorLayoutRoute,
   path: "/",
-  component: VendorOverview,
+  component: VendorDashboard,
+})
+
+const vendorOrdersRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/orders",
+  component: VendorOrders,
+})
+
+const vendorProductsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/products",
+  component: VendorProducts,
+})
+
+const vendorCollectionsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/products/collections",
+  component: VendorCollections,
+})
+
+const vendorCategoriesRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/products/categories",
+  component: VendorCategories,
+})
+
+const vendorImportsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/products/imports",
+  component: VendorImports,
+})
+
+const vendorInventoryRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/inventory",
+  component: VendorInventory,
+})
+
+const vendorCustomersRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/customers",
+  component: VendorCustomers,
+})
+
+const vendorPromotionsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/promotions",
+  component: VendorPromotions,
+})
+
+const vendorPriceListsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/price-lists",
+  component: VendorPriceLists,
+})
+
+const vendorRequestsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/requests",
+  component: VendorRequests,
+})
+
+const vendorSettingsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/settings",
+  component: VendorSettings,
+})
+
+const vendorConnectRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/connect",
+  component: VendorConnect,
+})
+
+const vendorExtensionsRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/extensions",
+  component: VendorExtensions,
 })
 
 const pricingRoute = createRoute({
@@ -209,6 +300,19 @@ const routeTree = rootRoute.addChildren([
   ]),
   vendorLayoutRoute.addChildren([
     vendorOverviewRoute,
+    vendorOrdersRoute,
+    vendorProductsRoute,
+    vendorCollectionsRoute,
+    vendorCategoriesRoute,
+    vendorImportsRoute,
+    vendorInventoryRoute,
+    vendorCustomersRoute,
+    vendorPromotionsRoute,
+    vendorPriceListsRoute,
+    vendorRequestsRoute,
+    vendorSettingsRoute,
+    vendorConnectRoute,
+    vendorExtensionsRoute,
   ]),
   loginRoute,
   docsLayoutRoute.addChildren([docsRoute, docsPageRoute]),

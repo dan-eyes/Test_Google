@@ -39,13 +39,13 @@ export function DashboardCustomers() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Header */}
-      <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800 pb-6">
+      <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-700 pb-6">
         <div>
           <h1 className="text-[24px] font-semibold text-zinc-900 dark:text-white tracking-tight">Customers</h1>
           <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">Manage your customer base.</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-3 py-1.5 bg-white dark:bg-[#09090B] border border-zinc-200 dark:border-zinc-800 rounded-md text-[13px] font-medium text-zinc-700 dark:text-zinc-300 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2">
+          <button className="px-3 py-1.5 bg-white dark:bg-[#18181B] border border-zinc-200 dark:border-zinc-700 rounded-md text-[13px] font-medium text-zinc-700 dark:text-zinc-300 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors flex items-center gap-2">
             <Download className="w-3.5 h-3.5" /> Export
           </button>
           <button className="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-[13px] font-medium rounded-md shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors flex items-center gap-2">

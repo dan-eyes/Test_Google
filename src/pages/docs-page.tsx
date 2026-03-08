@@ -113,7 +113,7 @@ export function DocsPage() {
                 div: ({node, ...props}) => {
                   if (props.className === "steps-list") {
                     return (
-                      <div className="relative space-y-10 my-10 border-l border-zinc-200 dark:border-zinc-800 not-prose ml-4 pl-8">
+                      <div className="relative space-y-10 my-10 border-l border-zinc-200 dark:border-zinc-700 not-prose ml-4 pl-8">
                         {props.children}
                       </div>
                     )
@@ -139,9 +139,9 @@ export function DocsPage() {
       </div>
 
       {/* SIDEBAR DESTRA (TOC) */}
-      <aside className="hidden xl:block w-[240px] flex-shrink-0 overflow-y-auto py-12 pr-8 border-l border-zinc-100 dark:border-zinc-800/50">
+      <aside className="hidden xl:block w-[240px] flex-shrink-0 overflow-y-auto py-12 pr-8 border-l border-zinc-100 dark:border-zinc-700/50">
         <h5 className="text-[11px] font-bold text-zinc-900 dark:text-white uppercase tracking-wider mb-4 pl-4">In questa pagina</h5>
-        <div className="border-l border-zinc-200 dark:border-zinc-800/80 ml-4">
+        <div className="border-l border-zinc-200 dark:border-zinc-700/80 ml-4">
           <ul className="space-y-2.5 text-[13px] -ml-[1px]">
             {headings.map((heading, i) => (
               <li key={i}>
@@ -161,7 +161,7 @@ export function DocsPage() {
           </ul>
         </div>
         
-        <div className="mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-800/80 ml-4">
+        <div className="mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-700/80 ml-4">
           <h5 className="text-[11px] font-bold text-zinc-900 dark:text-white uppercase tracking-wider mb-4">Risorse</h5>
           <ul className="space-y-3 text-[13px] text-zinc-500 dark:text-zinc-500 font-medium">
             <li><a href="#" className="hover:text-zinc-900 dark:hover:text-white flex items-center gap-2 transition-colors">Segnala un problema</a></li>

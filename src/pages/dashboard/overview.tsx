@@ -15,7 +15,7 @@ import {
 
 function StatCard({ title, value, trend, trendLabel, icon: Icon }: { title: string, value: string, trend?: string, trendLabel?: string, icon?: any }) {
   return (
-    <div className="bg-white dark:bg-[#09090B] border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
+    <div className="bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-2">
           {Icon && <div className="p-1.5 bg-zinc-50 dark:bg-zinc-800 rounded-md text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors"><Icon className="w-3.5 h-3.5" /></div>}
@@ -40,7 +40,7 @@ function StatCard({ title, value, trend, trendLabel, icon: Icon }: { title: stri
 
 function ActivityItem({ title, desc, time, amount, status }: { title: string, desc: string, time: string, amount?: string, status?: 'completed' | 'pending' | 'failed' }) {
   return (
-    <div className="flex items-center justify-between py-3.5 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 px-2 -mx-2 rounded-md transition-colors cursor-pointer group">
+    <div className="flex items-center justify-between py-3.5 border-b border-zinc-100 dark:border-zinc-700/50 last:border-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-700/20 px-2 -mx-2 rounded-md transition-colors cursor-pointer group">
       <div className="flex items-center gap-3.5">
         <div className="w-9 h-9 rounded-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 flex items-center justify-center text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 group-hover:border-zinc-200 dark:group-hover:border-zinc-600 transition-all">
           <ShoppingBag className="w-4 h-4" />
@@ -67,13 +67,13 @@ export function DashboardOverview() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Header Section */}
-      <div className="flex justify-between items-end border-b border-zinc-200 dark:border-zinc-800 pb-6">
+      <div className="flex justify-between items-end border-b border-zinc-200 dark:border-zinc-700 pb-6">
         <div>
           <h1 className="text-[24px] font-semibold text-zinc-900 dark:text-white tracking-tight">Overview</h1>
           <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">Welcome back, here's what's happening with your store today.</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-3 py-1.5 bg-white dark:bg-[#09090B] border border-zinc-200 dark:border-zinc-800 rounded-md text-[13px] font-medium text-zinc-700 dark:text-zinc-300 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2">
+          <button className="px-3 py-1.5 bg-white dark:bg-[#18181B] border border-zinc-200 dark:border-zinc-700 rounded-md text-[13px] font-medium text-zinc-700 dark:text-zinc-300 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors flex items-center gap-2">
             <CreditCard className="w-3.5 h-3.5 text-zinc-400" /> Manage Cards
           </button>
           <button className="px-3 py-1.5 bg-zinc-900 dark:bg-white border border-transparent rounded-md text-[13px] font-medium text-white dark:text-zinc-900 shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors flex items-center gap-2">
@@ -94,14 +94,14 @@ export function DashboardOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Main Chart Area */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#09090B] border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 shadow-sm min-h-[420px] flex flex-col">
+        <div className="lg:col-span-2 bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 shadow-sm min-h-[420px] flex flex-col">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h3 className="text-[14px] font-semibold text-zinc-900 dark:text-white">Revenue Analytics</h3>
               <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mt-0.5">Monthly revenue performance</p>
             </div>
             <div className="flex items-center gap-2">
-              <select className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[12px] rounded-md px-2 py-1 text-zinc-600 dark:text-zinc-300 outline-none focus:ring-1 focus:ring-blue-500">
+              <select className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-[12px] rounded-md px-2 py-1 text-zinc-600 dark:text-zinc-300 outline-none focus:ring-1 focus:ring-blue-500">
                 <option>Last 12 months</option>
                 <option>Last 30 days</option>
                 <option>Last 7 days</option>
@@ -111,7 +111,7 @@ export function DashboardOverview() {
           </div>
           
           {/* Placeholder Chart */}
-          <div className="flex-1 w-full bg-zinc-50/50 dark:bg-zinc-900/30 rounded border border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center text-zinc-400 gap-3 group cursor-crosshair hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+          <div className="flex-1 w-full bg-zinc-50/50 dark:bg-zinc-900/30 rounded border border-dashed border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-zinc-400 gap-3 group cursor-crosshair hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
             <TrendingUp className="w-8 h-8 text-zinc-300 dark:text-zinc-700 group-hover:scale-110 transition-transform duration-300" />
             <span className="text-[13px] font-medium">Chart Visualization Placeholder</span>
             <span className="text-[11px] text-zinc-400">Data will appear here once you start selling</span>
@@ -119,7 +119,7 @@ export function DashboardOverview() {
         </div>
 
         {/* Recent Activity Feed */}
-        <div className="bg-white dark:bg-[#09090B] border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 shadow-sm flex flex-col">
+        <div className="bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 shadow-sm flex flex-col">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-[14px] font-semibold text-zinc-900 dark:text-white">Recent Activity</h3>
             <button className="text-[12px] font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">View All</button>
@@ -163,7 +163,7 @@ export function DashboardOverview() {
             />
           </div>
           
-          <button className="w-full mt-6 py-2 text-[13px] font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-800 rounded-md hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 group">
+          <button className="w-full mt-6 py-2 text-[13px] font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-700 rounded-md hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all flex items-center justify-center gap-2 group">
             See all orders <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>

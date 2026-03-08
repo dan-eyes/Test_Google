@@ -25,7 +25,7 @@ export function Docs() {
             <Link 
               key={i}
               to={link.path}
-              className="group p-5 bg-zinc-50 dark:bg-[#1A1A1A] border border-zinc-200 dark:border-zinc-800/80 rounded-xl hover:shadow-md dark:hover:border-zinc-700 transition-all"
+              className="group p-5 bg-zinc-50 dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700/80 rounded-xl hover:shadow-md dark:hover:border-zinc-700 transition-all"
             >
               <div className="h-10 w-10 rounded-lg bg-white dark:bg-[#222] border border-zinc-200 dark:border-zinc-700 flex items-center justify-center mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-zinc-600 dark:text-zinc-400">
                 <link.icon className="h-5 w-5" />

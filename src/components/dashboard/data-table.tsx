@@ -60,10 +60,10 @@ export function DataTable<T extends { id: string | number }>({
   searchPlaceholder = "Search..."
 }: DataTableProps<T>) {
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-[#09090B] border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm overflow-hidden">
+    <div className="flex flex-col h-full bg-white dark:bg-[#18181B] border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm overflow-hidden">
       
       {/* --- HEADER & TABS --- */}
-      <div className="border-b border-zinc-200 dark:border-zinc-800">
+      <div className="border-b border-zinc-200 dark:border-zinc-700">
         {/* Tabs Row */}
         {tabs && (
           <div className="flex items-center px-4 gap-6 overflow-x-auto custom-scrollbar">
@@ -102,13 +102,13 @@ export function DataTable<T extends { id: string | number }>({
               <input 
                 type="text" 
                 placeholder={searchPlaceholder}
-                className="w-full h-8 pl-8 pr-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md text-[13px] placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-shadow"
+                className="w-full h-8 pl-8 pr-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-md text-[13px] placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-shadow"
                 onChange={(e) => onSearch?.(e.target.value)}
               />
             </div>
             <button 
               onClick={onFilter}
-              className="h-8 px-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2"
+              className="h-8 px-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-md text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors flex items-center gap-2"
             >
               <Filter className="w-3.5 h-3.5" />
               Filter
@@ -124,7 +124,7 @@ export function DataTable<T extends { id: string | number }>({
       {/* --- TABLE CONTENT --- */}
       <div className="flex-1 overflow-auto">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-zinc-50 dark:bg-zinc-900/50 sticky top-0 z-10 border-b border-zinc-200 dark:border-zinc-800">
+          <thead className="bg-zinc-50 dark:bg-zinc-900/50 sticky top-0 z-10 border-b border-zinc-200 dark:border-zinc-700">
             <tr>
               <th className="w-10 px-4 py-3">
                 <input type="checkbox" className="rounded border-zinc-300 dark:border-zinc-700 text-blue-600 focus:ring-blue-500 bg-white dark:bg-zinc-900" />
@@ -168,15 +168,15 @@ export function DataTable<T extends { id: string | number }>({
       </div>
 
       {/* --- PAGINATION --- */}
-      <div className="border-t border-zinc-200 dark:border-zinc-800 p-3 flex items-center justify-between bg-zinc-50/30 dark:bg-zinc-900/20">
+      <div className="border-t border-zinc-200 dark:border-zinc-700 p-3 flex items-center justify-between bg-zinc-50/30 dark:bg-zinc-900/20">
         <span className="text-[12px] text-zinc-500 dark:text-zinc-400">
           Viewing {data.length} results
         </span>
         <div className="flex items-center gap-2">
-          <button className="p-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-400 disabled:opacity-50 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors" disabled>
+          <button className="p-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-400 disabled:opacity-50 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors" disabled>
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
-          <button className="p-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+          <button className="p-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors">
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
