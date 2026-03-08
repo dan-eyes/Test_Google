@@ -23,7 +23,7 @@ import {
   Monitor
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useTheme } from "@/components/theme-provider"
+import { useTheme } from "@/components/ui/theme-provider"
 
 function SidebarItem({ 
   icon: Icon, 

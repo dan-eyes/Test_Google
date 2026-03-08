@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
-import { Button } from "./ui/button"
-import { Logo } from "./ui/logo"
+import { Button } from "@/components/ui/button"
+import { Logo } from "@/components/ui/logo"
 import { Globe, BookOpen, CheckCircle, FileText, Cpu, Zap, Puzzle, Briefcase, Megaphone, Users, Book } from "lucide-react"
 
 export function Navbar() {

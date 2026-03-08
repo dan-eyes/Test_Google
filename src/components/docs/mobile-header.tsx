@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { Menu } from "lucide-react"
 import { Logo } from "@/components/ui/logo"
 import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 interface MobileHeaderProps {
   onMenuToggle: () => void
