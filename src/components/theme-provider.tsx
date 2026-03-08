@@ -1,6 +1,6 @@
 import * as React from "react"
 
-type Theme = "dark" | "light"
+type Theme = "dark" | "light" | "system"
 
 interface ThemeProviderState {
   theme: Theme
@@ -8,7 +8,7 @@ interface ThemeProviderState {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "light",
+  theme: "system",
   setTheme: () => null,
 }
 
@@ -16,7 +16,7 @@ const ThemeProviderContext = React.createContext<ThemeProviderState>(initialStat
 
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
+  defaultTheme = "system",
   storageKey = "ui-theme",
   ...props
 }: {
@@ -32,6 +32,17 @@ export function ThemeProvider({
     const root = window.document.documentElement
 
     root.classList.remove("light", "dark")
+
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light"
+
+      root.classList.add(systemTheme)
+      return
+    }
+
     root.classList.add(theme)
   }, [theme])
 

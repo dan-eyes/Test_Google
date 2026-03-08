@@ -14,6 +14,19 @@ import { Product } from "./pages/product"
 import { Docs } from "./pages/docs"
 import { DocsPage } from "./pages/docs-page"
 import { Login } from "./pages/login"
+import { PaymentProcessing } from "./pages/payment-processing"
+import { DashboardLayout } from "./pages/dashboard/layout"
+import { DashboardOverview } from "./pages/dashboard/overview"
+import { DashboardOrders } from "./pages/dashboard/orders"
+import { DashboardProducts } from "./pages/dashboard/products"
+import { DashboardCustomers } from "./pages/dashboard/customers"
+import { DashboardInventory } from "./pages/dashboard/inventory"
+import { DashboardDiscounts } from "./pages/dashboard/discounts"
+import { DashboardGiftCards } from "./pages/dashboard/gift-cards"
+import { DashboardPricing } from "./pages/dashboard/pricing"
+import { DashboardSettings } from "./pages/dashboard/settings"
+import { VendorLayout } from "./pages/vendor/vendor-layout"
+import { VendorOverview } from "./pages/vendor/vendor-overview"
 import { ErrorBoundary } from "./components/error-boundary"
 
 import { ThemeProvider } from "./components/theme-provider"
@@ -56,6 +69,86 @@ const onboardingRoute = createRoute({
       billing: (search.billing as string) || undefined,
     }
   },
+})
+
+const paymentProcessingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/payment-processing",
+  component: PaymentProcessing,
+})
+
+// --- DASHBOARD ROUTES ---
+const dashboardLayoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/dashboard",
+  component: DashboardLayout,
+})
+
+const dashboardOverviewRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/",
+  component: DashboardOverview,
+})
+
+const dashboardOrdersRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/orders",
+  component: DashboardOrders,
+})
+
+const dashboardProductsRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/products",
+  component: DashboardProducts,
+})
+
+const dashboardCustomersRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/customers",
+  component: DashboardCustomers,
+})
+
+const dashboardInventoryRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/inventory",
+  component: DashboardInventory,
+})
+
+const dashboardDiscountsRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/discounts",
+  component: DashboardDiscounts,
+})
+
+const dashboardGiftCardsRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/gift-cards",
+  component: DashboardGiftCards,
+})
+
+const dashboardPricingRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/pricing",
+  component: DashboardPricing,
+})
+
+const dashboardSettingsRoute = createRoute({
+  getParentRoute: () => dashboardLayoutRoute,
+  path: "/settings",
+  component: DashboardSettings,
+})
+
+// --- VENDOR ROUTES ---
+const vendorLayoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/vendor",
+  component: VendorLayout,
+})
+
+const vendorOverviewRoute = createRoute({
+  getParentRoute: () => vendorLayoutRoute,
+  path: "/",
+  component: VendorOverview,
 })
 
 const pricingRoute = createRoute({
@@ -102,6 +195,21 @@ const routeTree = rootRoute.addChildren([
     productRoute,
   ]),
   onboardingRoute,
+  paymentProcessingRoute,
+  dashboardLayoutRoute.addChildren([
+    dashboardOverviewRoute,
+    dashboardOrdersRoute,
+    dashboardProductsRoute,
+    dashboardCustomersRoute,
+    dashboardInventoryRoute,
+    dashboardDiscountsRoute,
+    dashboardGiftCardsRoute,
+    dashboardPricingRoute,
+    dashboardSettingsRoute,
+  ]),
+  vendorLayoutRoute.addChildren([
+    vendorOverviewRoute,
+  ]),
   loginRoute,
   docsLayoutRoute.addChildren([docsRoute, docsPageRoute]),
 ])

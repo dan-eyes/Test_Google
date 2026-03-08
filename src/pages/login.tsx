@@ -35,7 +35,7 @@ export function Login() {
     // Simula Login
     await new Promise(resolve => setTimeout(resolve, 1500))
     setIsLoading(false)
-    alert("Login simulato con successo")
+    navigate({ to: "/vendor" })
   }
 
   return (

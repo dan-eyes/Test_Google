@@ -674,7 +674,7 @@ export function OnboardingFlow() {
                     
                     {/* BOTTONE PAGA CORRETTO (SENZA IMPORTO) E ALLINEATO */}
                     <div className="pt-2">
-                      <ContinueButton onClick={() => setStep("DASHBOARD")}>
+                      <ContinueButton onClick={() => navigate({ to: "/payment-processing" })}>
                         Conferma pagamento
                       </ContinueButton>
                     </div>
@@ -687,7 +687,7 @@ export function OnboardingFlow() {
                     </div>
                     
                     <div className="pt-2">
-                      <ContinueButton onClick={() => setStep("DASHBOARD")}>
+                      <ContinueButton onClick={() => navigate({ to: "/payment-processing" })}>
                         Conferma SEPA
                       </ContinueButton>
                     </div>
