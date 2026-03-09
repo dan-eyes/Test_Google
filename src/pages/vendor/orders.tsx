@@ -5,7 +5,7 @@ export function VendorOrders() {
   const iconButtonClass = "flex items-center justify-center w-8 h-8 bg-white dark:bg-[#18181B] border border-zinc-200 dark:border-zinc-700 rounded-md text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-[#27272A] hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors shadow-sm"
 
   return (
-    <div className="bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm w-full h-[calc(100vh-56px-32px)] flex flex-col overflow-hidden animate-in fade-in duration-300">
+    <div className="bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm w-full h-[calc(100vh-32px)] flex flex-col overflow-hidden animate-in fade-in duration-300">
         
         <div className="px-5 py-4 border-b border-zinc-200 dark:border-zinc-700 flex items-center justify-between bg-white dark:bg-[#18181B]">
           <h1 className="text-[16px] font-semibold text-zinc-900 dark:text-zinc-50 tracking-tight">
