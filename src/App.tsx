@@ -28,6 +28,12 @@ import { VendorPromotions } from "@/pages/vendor/promotions"
 import { VendorPriceLists } from "@/pages/vendor/price-lists"
 import { VendorRequests } from "@/pages/vendor/requests"
 import { VendorSettings } from "@/pages/vendor/settings"
+import { VendorSettingsStore } from "@/pages/vendor/settings/store"
+import { VendorSettingsTeam } from "@/pages/vendor/settings/team"
+import { VendorSettingsProductTypes } from "@/pages/vendor/settings/product-types"
+import { VendorSettingsProductTags } from "@/pages/vendor/settings/product-tags"
+import { VendorSettingsLocations } from "@/pages/vendor/settings/locations"
+import { VendorSettingsProfile } from "@/pages/vendor/settings/profile"
 import { VendorConnect } from "@/pages/vendor/connect"
 import { VendorExtensions } from "@/pages/vendor/extensions"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
@@ -159,6 +165,42 @@ const vendorSettingsRoute = createRoute({
   component: VendorSettings,
 })
 
+const vendorSettingsIndexRoute = createRoute({
+  getParentRoute: () => vendorSettingsRoute,
+  path: "/",
+  component: VendorSettingsStore,
+})
+
+const vendorSettingsTeamRoute = createRoute({
+  getParentRoute: () => vendorSettingsRoute,
+  path: "/team",
+  component: VendorSettingsTeam,
+})
+
+const vendorSettingsProductTypesRoute = createRoute({
+  getParentRoute: () => vendorSettingsRoute,
+  path: "/product-types",
+  component: VendorSettingsProductTypes,
+})
+
+const vendorSettingsProductTagsRoute = createRoute({
+  getParentRoute: () => vendorSettingsRoute,
+  path: "/product-tags",
+  component: VendorSettingsProductTags,
+})
+
+const vendorSettingsLocationsRoute = createRoute({
+  getParentRoute: () => vendorSettingsRoute,
+  path: "/locations",
+  component: VendorSettingsLocations,
+})
+
+const vendorSettingsProfileRoute = createRoute({
+  getParentRoute: () => vendorSettingsRoute,
+  path: "/profile",
+  component: VendorSettingsProfile,
+})
+
 const vendorConnectRoute = createRoute({
   getParentRoute: () => vendorLayoutRoute,
   path: "/connect",
@@ -228,7 +270,14 @@ const routeTree = rootRoute.addChildren([
     vendorPromotionsRoute,
     vendorPriceListsRoute,
     vendorRequestsRoute,
-    vendorSettingsRoute,
+    vendorSettingsRoute.addChildren([
+      vendorSettingsIndexRoute,
+      vendorSettingsTeamRoute,
+      vendorSettingsProductTypesRoute,
+      vendorSettingsProductTagsRoute,
+      vendorSettingsLocationsRoute,
+      vendorSettingsProfileRoute,
+    ]),
     vendorConnectRoute,
     vendorExtensionsRoute,
   ]),

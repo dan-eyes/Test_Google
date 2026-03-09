@@ -1,9 +1,25 @@
-import { Search, Settings, PanelLeft, ShoppingCart, Tag, Building2, Users, TicketPercent, CircleDollarSign, RefreshCcw, Box, Puzzle, ChevronDown, UserPlus, Zap, ChevronRight, Plus, Globe, Check } from "lucide-react"
+import { Search, Settings, PanelLeft, ShoppingCart, Tag, Building2, Users, TicketPercent, CircleDollarSign, RefreshCcw, Box, Puzzle, ChevronDown, UserPlus, Zap, ChevronRight, Plus, Globe, Check, LogOut, Monitor, ExternalLink, LifeBuoy, FileText, Sun, Moon, ChevronLeft } from "lucide-react"
 import { Link, useLocation } from "@tanstack/react-router"
 import { cn } from "../../lib/utils"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 
-// 1. ICONA DASHBOARD (ROMBI)
+// Hook per gestire il click outside
+function useClickOutside(ref: React.RefObject<HTMLElement | null>, handler: () => void) {
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (!ref.current || ref.current.contains(event.target as Node)) return;
+      handler();
+    };
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  }, [ref, handler]);
+}
+
+// 1. ICONA DASHBOARD
 const DiamondGridIcon = ({ className, strokeWidth }: any) => (
   <svg className={className} strokeWidth={strokeWidth} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 2l-4 4 4 4 4-4-4-4z" />
@@ -23,7 +39,7 @@ const IdaLogo = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// 3. ICONA INBOX (16x16)
+// 3. ICONA INBOX
 const InboxIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className={cn("w-4 h-4", className)} aria-hidden="true">
     <path d="M20.25 12.75h-4.559a3.65 3.65 0 0 1-3.591 3h-.2a3.65 3.65 0 0 1-3.591-3H3.75V16A2.25 2.25 0 0 0 6 18.25h12A2.25 2.25 0 0 0 20.25 16zm-12.365-7a2.25 2.25 0 0 0-2.028 1.273L3.973 10.94q-.072.15-.12.31H9a.75.75 0 0 1 .75.75v.1a2.15 2.15 0 0 0 2.15 2.15h.2a2.15 2.15 0 0 0 2.15-2.15V12a.75.75 0 0 1 .75-.75h5.143a2 2 0 0 0-.115-.299l-1.886-3.926a2.25 2.25 0 0 0-2.029-1.275zM21.75 16A3.75 3.75 0 0 1 18 19.75H6A3.75 3.75 0 0 1 2.25 16v-4.085c0-.563.127-1.12.371-1.627l1.886-3.915A3.75 3.75 0 0 1 7.885 4.25h8.228a3.75 3.75 0 0 1 3.38 2.126l1.887 3.926c.243.507.37 1.062.37 1.624z" />
@@ -32,40 +48,76 @@ const InboxIcon = ({ className }: { className?: string }) => (
 
 const menuItems = [
   { title: "Dashboard", icon: DiamondGridIcon, path: "/vendor" },
-  { title: "Orders", icon: ShoppingCart, path: "/vendor/orders" },
+  { title: "Ordini", icon: ShoppingCart, path: "/vendor/orders" },
   { 
-    title: "Products", 
+    title: "Prodotti", 
     icon: Tag, 
     path: "/vendor/products",
     submenu: [
-      { title: "Collections", path: "/vendor/products/collections" },
-      { title: "Categories", path: "/vendor/products/categories" },
-      { title: "Imports", path: "/vendor/products/imports" },
+      { title: "Collezioni", path: "/vendor/products/collections" },
+      { title: "Categorie", path: "/vendor/products/categories" },
+      { title: "Importazioni", path: "/vendor/products/imports" },
     ]
   },
-  { title: "Inventory", icon: Building2, path: "/vendor/inventory" },
-  { title: "Customers", icon: Users, path: "/vendor/customers" },
-  { title: "Promotions", icon: TicketPercent, path: "/vendor/promotions" },
-  { title: "Price lists", icon: CircleDollarSign, path: "/vendor/price-lists" },
-  { title: "Requests", icon: RefreshCcw, path: "/vendor/requests" },
+  { title: "Inventario", icon: Building2, path: "/vendor/inventory" },
+  { title: "Clienti", icon: Users, path: "/vendor/customers" },
+  { title: "Promozioni", icon: TicketPercent, path: "/vendor/promotions" },
+  { title: "Listini", icon: CircleDollarSign, path: "/vendor/price-lists" },
+  { title: "Richieste", icon: RefreshCcw, path: "/vendor/requests" },
 ]
 
 export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean, toggleSidebar: () => void }) {
   const location = useLocation()
   const isActive = (path: string) => location.pathname === path || (path !== "/vendor" && location.pathname.startsWith(path))
   const [openMenu, setOpenMenu] = useState<string>(location.pathname.includes("/vendor/products") ? "Products" : "")
-  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false) // Stato per il dropdown Workspace
+  
+  // Stati per i Dropdown
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  
+  // Stato per gestire la vista "drill-down" all'interno del menu utente
+  const [userMenuView, setUserMenuView] = useState<'main' | 'appearance'>('main')
+  
+  // Stato del tema
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('dark')
+
+  // Refs per chiudere cliccando fuori
+  const workspaceRef = useRef<HTMLDivElement>(null)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+
+  const isSettings = location.pathname.startsWith("/vendor/settings");
+
+  useClickOutside(workspaceRef, () => setIsWorkspaceOpen(false))
+  useClickOutside(userMenuRef, () => {
+    setIsUserMenuOpen(false);
+    setTimeout(() => setUserMenuView('main'), 200);
+  })
+
+  // Effetto tema
+  useEffect(() => {
+    const root = document.getElementById('vendor-dashboard-root');
+    if (!root) return;
+    root.classList.remove('light', 'dark');
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.classList.add(systemTheme);
+    } else {
+      root.classList.add(theme);
+    }
+  }, [theme]);
+
+  // Sfondo scuro in dark mode per i Menu e Tooltips
+  const tooltipClasses = "absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-[12px] font-medium rounded shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-[9999] pointer-events-none";
 
   return (
     <aside className={cn(
-      "flex-shrink-0 flex flex-col h-full bg-white dark:bg-[#18181B] border-r border-zinc-200 dark:border-zinc-700 transition-all duration-300 relative",
-      isCollapsed ? "w-[68px]" : "w-[240px]"
+      "flex-shrink-0 flex flex-col h-full bg-white dark:bg-[#18181B] border-r border-zinc-200 dark:border-zinc-700 transition-all duration-300 relative z-[200]",
+      isCollapsed ? "w-[68px] overflow-visible" : "w-[240px]"
     )}>
       
       {/* 1. STORE SELECTOR & TOGGLE */}
-      {/* Aggiunto pl-2 per allineare il logo Ida e PanelLeft con le voci sottostanti */}
-      <div className="px-3 pl-2 pt-4 pb-2 flex-shrink-0 relative">
-        <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-between px-1")}>
+      <div className={cn("pt-4 pb-2 flex-shrink-0 relative", isCollapsed ? "px-0" : "px-3")}>
+        <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-between")}>
           {isCollapsed ? (
             <button 
               onClick={(e) => { e.preventDefault(); toggleSidebar(); }}
@@ -78,269 +130,404 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
             </button>
           ) : (
             <>
-              {/* Pulsante indipendente per il Logo */}
-              <button className="flex items-center gap-2 hover:bg-zinc-100 dark:hover:bg-[#27272A] rounded-md transition-colors p-1">
+              <button className="flex items-center gap-2 hover:bg-zinc-100 dark:hover:bg-[#27272A] rounded-md transition-colors p-1 ml-1">
                 <div className="w-7 h-7 flex items-center justify-center bg-zinc-900 dark:bg-white/5 border border-transparent dark:border-white/10 rounded-md shadow-sm">
                    <IdaLogo className="h-3" />
                 </div>
               </button>
-              
-              {/* Pulsante indipendente per chiudere la sidebar */}
               <button 
                 onClick={(e) => { e.preventDefault(); toggleSidebar(); }}
-                className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors mr-1"
               >
                 <PanelLeft className="w-4 h-4" strokeWidth={1.5} />
               </button>
             </>
           )}
         </div>
-        <div className="absolute bottom-0 left-5 right-5 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
+        <div className="absolute bottom-0 left-0 right-0 mx-4 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
       </div>
 
-      {/* 2. WORKSPACE SWITCHER */}
-      {/* Aggiunto mt-4 per distanziare dal bordo tratteggiato */}
-      <div className={cn("px-3 mt-4 mb-2 relative", isCollapsed && "px-0")}>
-        <button 
-           onClick={() => !isCollapsed && setIsWorkspaceOpen(!isWorkspaceOpen)}
-           className={cn(
-             "flex items-center justify-between w-full rounded-md text-zinc-900 dark:text-zinc-50 bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 group",
-             isCollapsed ? "justify-center h-8 w-8 mx-auto" : "px-2 py-1.5",
-             isWorkspaceOpen && "bg-zinc-100 dark:bg-[#27272A] border-zinc-200/60 dark:border-zinc-700"
-           )}
-         >
-           <div className={cn("flex items-center gap-2.5", isCollapsed && "gap-0")}>
-              {/* Logo Acme Corp (24x24 container, 22x22 img) */}
-              <div className="w-5 h-5 rounded bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center border border-zinc-300 dark:border-zinc-600 transition-colors flex-shrink-0">
-                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300">AC</span>
+      {/* 2. MAIN NAVIGATION E WORKSPACE SWITCHER */}
+      <div className={cn("flex-1 px-3 py-1 flex flex-col gap-0.5 custom-scrollbar", isCollapsed ? "overflow-visible" : "overflow-y-auto relative")}>
+        
+        {/* WORKSPACE SWITCHER DROPDOWN */}
+        <div className={cn("mt-1.5 relative w-full", isCollapsed && "flex justify-center")} ref={workspaceRef}>
+          <button 
+            onClick={(e) => { e.preventDefault(); setIsWorkspaceOpen(!isWorkspaceOpen); }}
+            className={cn(
+              "flex items-center justify-between w-full h-8 rounded-md text-zinc-900 dark:text-zinc-50 bg-zinc-50 dark:bg-[#27272A]/50 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-blue-500",
+              isCollapsed ? "justify-center w-8 mx-auto" : "px-2",
+              isWorkspaceOpen && "bg-zinc-100 dark:bg-[#27272A] border-zinc-200/60 dark:border-zinc-700"
+            )}
+          >
+            <div className={cn("flex items-center gap-2.5", isCollapsed && "gap-0")}>
+              <div className="size-5 rounded-md bg-red-600 flex items-center justify-center text-white shadow-inner shrink-0">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="size-3"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
               </div>
-              <span className={cn(
-                "text-[13px] font-medium text-zinc-900 dark:text-zinc-50 truncate",
-                isCollapsed && "hidden"
-              )}>
-                Acme Corp
+              <span className={cn("text-[13px] font-medium text-zinc-900 dark:text-zinc-50 truncate", isCollapsed && "hidden")}>
+                Brembo S.p.A.
               </span>
-           </div>
-           
-           {!isCollapsed && (
-             <ChevronDown className={cn("w-4 h-4 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-transform shrink-0", isWorkspaceOpen && "rotate-180")} strokeWidth={1.5} />
-           )}
-        </button>
+            </div>
+            {!isCollapsed && (
+              <ChevronDown className={cn("w-4 h-4 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-transform shrink-0", isWorkspaceOpen && "rotate-180")} strokeWidth={1.5} />
+            )}
+          </button>
 
-        {/* MENU A TENDINA WORKSPACE (Visibile solo se aperto) */}
-        {/* Usiamo w-[calc(100%-16px)] e mx-2 per adattarlo alla larghezza della sidebar */}
-        {isWorkspaceOpen && !isCollapsed && (
-          <div className="absolute top-full left-0 right-0 mt-1 z-[100] w-[calc(100%-24px)] mx-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#18181B] shadow-xl p-2 animate-in fade-in zoom-in-95 duration-100 flex flex-col gap-1">
-
-            {/* 1. Header Account */}
-            <div className="flex items-center gap-3 p-1 mb-1">
-              <div className="size-10 rounded-lg bg-[#b54a22] flex items-center justify-center text-white font-medium text-[16px] flex-shrink-0 shadow-inner">
-                AC
+          {/* MENU A TENDINA WORKSPACE - POSITION FIXED A SIDEBAR CHIUSA */}
+          {isWorkspaceOpen && (
+            <div className="absolute left-0 top-[calc(100%+8px)] z-[9999] w-[224px] rounded-xl bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 shadow-lg p-2 animate-in fade-in zoom-in-95 duration-100 flex flex-col gap-1">
+              <div className="flex items-center gap-3 p-1 mb-1">
+                <div className="size-10 rounded-lg bg-red-600 flex items-center justify-center text-white font-medium text-[16px] flex-shrink-0 shadow-inner">
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="size-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[14px] font-semibold text-zinc-900 dark:text-zinc-50 truncate">Brembo S.p.A.</span>
+                  <span className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate">Free Plan • 2 members</span>
+                </div>
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-[14px] font-medium text-zinc-900 dark:text-zinc-50 truncate">Acme Corp</span>
-                <span className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate">Free Plan • 2 members</span>
+              <div className="flex gap-1.5 px-1">
+                <Link to="/vendor/settings" onClick={() => setIsWorkspaceOpen(false)} className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors">
+                  <Settings className="size-3.5 shrink-0" strokeWidth={1.5} /> Impostazioni
+                </Link>
+                <button className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors">
+                  <UserPlus className="size-3.5 shrink-0" strokeWidth={1.5} /> Invita membri
+                </button>
               </div>
-            </div>
-
-            {/* 2. Azioni Primarie */}
-            <div className="flex gap-1.5 px-1">
-              <button className="flex-1 flex items-center justify-start gap-2 px-2.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors">
-                <Settings className="size-3.5" /> Settings
-              </button>
-              <button className="flex-1 flex items-center justify-start gap-2 px-2.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors">
-                <UserPlus className="size-3.5" /> Invite members
-              </button>
-            </div>
-
-            <div className="h-px bg-zinc-200 dark:bg-zinc-800/80 my-1 -mx-2" />
-
-            {/* 3. Call to Action (Upgrade) */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-zinc-50 dark:bg-[#27272A]/50">
-              <span className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
-                <Zap className="size-4" fill="currentColor" /> Turn Pro
-              </span>
-              <button className="bg-[#4F46E5] hover:bg-[#4338CA] text-white px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors shadow-sm">
-                Upgrade
-              </button>
-            </div>
-
-            {/* 4. Sezione Crediti */}
-            <div className="flex flex-col gap-2.5 p-3 rounded-lg bg-zinc-50 dark:bg-[#27272A]/50 mt-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Credits</span>
-                <span className="text-[12px] text-zinc-500 dark:text-zinc-400 flex items-center gap-0.5 hover:text-zinc-300 cursor-pointer transition-colors">
-                  5 left <ChevronRight className="size-3" />
+              <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
+              <div className="flex items-center justify-between p-2 rounded-lg bg-zinc-50 dark:bg-[#323236]">
+                <span className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
+                  <Zap className="size-4" fill="currentColor" strokeWidth={1.5} /> Passa a Pro
                 </span>
+                <button className="bg-[#4F46E5] hover:bg-[#4338CA] text-white px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors shadow-sm">
+                  Upgrade
+                </button>
               </div>
-              <div className="h-2.5 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                <div className="h-full bg-[#2563EB] rounded-full w-[80%]" />
+              <div className="flex flex-col gap-2.5 p-3 rounded-lg bg-zinc-50 dark:bg-[#323236] mt-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Crediti</span>
+                  <span className="text-[12px] text-zinc-500 dark:text-zinc-400 flex items-center gap-0.5 hover:text-zinc-300 cursor-pointer transition-colors">
+                    5 rimanenti <ChevronRight className="size-3" strokeWidth={1.5} />
+                  </span>
+                </div>
+                <div className="h-2.5 w-full bg-zinc-200 dark:bg-[#18181B] rounded-full overflow-hidden border border-transparent dark:border-zinc-700">
+                  <div className="h-full bg-[#2563EB] rounded-full w-[80%]" />
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="size-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400">I crediti si ricaricano a mezzanotte (UTC)</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="size-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                <span className="text-[11px] text-zinc-500 dark:text-zinc-400">Daily credits reset at midnight UTC</span>
+              <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
+              <div className="flex flex-col">
+                <span className="px-2 py-1 text-[11px] text-zinc-500 dark:text-zinc-400">Tutti i workspace</span>
+                <button className="flex items-center gap-2 w-full px-2 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 transition-colors text-left mt-0.5 group">
+                  <div className="size-5 rounded-md bg-red-600 flex items-center justify-center text-white font-medium text-[9px] shadow-inner shrink-0">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="size-3"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                  </div>
+                  <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100 truncate flex-1">Brembo S.p.A.</span>
+                  <span className="text-[9px] font-semibold bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 px-1.5 py-0.5 rounded-sm uppercase tracking-wider shrink-0">Free</span>
+                  <Check className="size-3.5 text-zinc-900 dark:text-zinc-100 shrink-0 ml-0.5" strokeWidth={1.5} />
+                </button>
+              </div>
+              <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
+              <div className="flex flex-col gap-0.5 pb-0.5">
+                <button className="flex items-center gap-3 px-2 py-1.5 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-[#323236] transition-colors text-left group">
+                  <div className="size-6 rounded-md bg-zinc-100 dark:bg-[#323236] border border-transparent dark:border-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm"><Plus className="size-3.5 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} /></div>
+                  <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">Crea nuovo workspace</span>
+                </button>
+                <button className="flex items-center gap-3 px-2 py-1.5 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-[#323236] transition-colors text-left group">
+                  <div className="size-6 rounded-md bg-zinc-100 dark:bg-[#323236] border border-transparent dark:border-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm"><Globe className="size-3.5 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} /></div>
+                  <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">Trova workspace</span>
+                </button>
               </div>
             </div>
+          )}
+        </div>
 
-            <div className="h-px bg-zinc-200 dark:bg-zinc-800/80 my-1 -mx-2" />
+        <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
 
-            {/* 5. Lista Workspaces */}
-            <div className="flex flex-col">
-              <span className="px-2 py-1 text-[11px] text-zinc-500 dark:text-zinc-400">All workspaces</span>
-              <button className="flex items-center gap-2.5 w-full px-2 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 transition-colors text-left mt-0.5 group">
-                <div className="size-6 rounded-md bg-[#b54a22] flex items-center justify-center text-white font-medium text-[11px] shadow-inner shrink-0">
-                  AC
-                </div>
-                <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100 truncate flex-1">Acme Corp</span>
-                <span className="text-[9px] font-semibold bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 px-1.5 py-0.5 rounded-sm uppercase tracking-wider">
-                  Free
-                </span>
-                <Check className="size-4 text-zinc-900 dark:text-zinc-100 shrink-0" />
-              </button>
+        {isSettings ? (
+          /* NAVIGAZIONE IMPOSTAZIONI */
+          <div className="flex flex-col gap-6 mt-1">
+            <Link to="/vendor" className="flex items-center gap-2 px-2 text-[13px] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors mb-2 group relative">
+              <ChevronLeft className="size-4" strokeWidth={1.5} />
+              <span className={cn(isCollapsed && "hidden")}>Torna alla Dashboard</span>
+              {isCollapsed && (
+                <span className={tooltipClasses}>Torna alla Dashboard</span>
+              )}
+            </Link>
+            <div className={cn(isCollapsed && "hidden")}>
+              <div className="flex items-center justify-between px-2 mb-1">
+                <span className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400">Impostazioni</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                {[
+                  { title: "Negozio", path: "/vendor/settings" },
+                  { title: "Team", path: "/vendor/settings/team" },
+                  { title: "Tipi di Prodotto", path: "/vendor/settings/product-types" },
+                  { title: "Tag Prodotto", path: "/vendor/settings/product-tags" },
+                  { title: "Sedi e Spedizioni", path: "/vendor/settings/locations" }
+                ].map(item => (
+                  <Link key={item.title} to={item.path} className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === item.path ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#27272A]")}>{item.title}</Link>
+                ))}
+              </div>
             </div>
-
-            <div className="h-px bg-zinc-200 dark:bg-zinc-800/80 my-1 -mx-2" />
-
-            {/* 6. Azioni Finali */}
-            <div className="flex flex-col gap-0.5 pb-0.5">
-              <button className="flex items-center gap-3 px-2 py-1.5 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] transition-colors text-left group">
-                <div className="size-7 rounded-md bg-zinc-100 dark:bg-[#27272A] border border-transparent dark:border-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm">
-                  <Plus className="size-4 text-zinc-700 dark:text-zinc-300" strokeWidth={2} />
-                </div>
-                <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">Create new workspace</span>
-              </button>
-              <button className="flex items-center gap-3 px-2 py-1.5 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] transition-colors text-left group">
-                <div className="size-7 rounded-md bg-zinc-100 dark:bg-[#27272A] border border-transparent dark:border-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm">
-                  <Globe className="size-4 text-zinc-700 dark:text-zinc-300" strokeWidth={2} />
-                </div>
-                <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">Find workspaces</span>
-              </button>
+            <div className={cn(isCollapsed && "hidden")}>
+              <div className="flex items-center justify-between px-2 mb-1">
+                <span className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400">Il Mio Account</span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <Link to="/vendor/settings/profile" className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === "/vendor/settings/profile" ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#27272A]")}>Profilo</Link>
+              </div>
             </div>
-
           </div>
+        ) : (
+          /* NAVIGAZIONE PRINCIPALE */
+          <>
+            {menuItems.map((item) => {
+              const active = isActive(item.path)
+              const isAccordionOpen = openMenu === item.title
+
+              return (
+                <div key={item.title} className="flex flex-col gap-0.5">
+                  <Link
+                    to={item.path}
+                    onClick={() => {
+                      if (item.submenu) {
+                        setOpenMenu(isAccordionOpen ? "" : item.title)
+                      } else {
+                        setOpenMenu("")
+                      }
+                    }}
+                    className={cn(
+                      "flex items-center transition-all rounded-md group h-8 relative",
+                      isCollapsed ? "justify-center w-8 mx-auto p-0 mb-1" : "justify-between w-full px-2 text-[13px]",
+                      active 
+                        ? "bg-white dark:bg-[#27272A] border border-zinc-200/60 dark:border-zinc-700 shadow-sm text-zinc-900 dark:text-zinc-50 font-medium" 
+                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent"
+                    )}
+                  >
+                    <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
+                      <item.icon className={cn("w-4 h-4", active ? "text-zinc-900 dark:text-zinc-50" : "text-zinc-500")} strokeWidth={1.5} />
+                      <span className={cn(isCollapsed && "hidden")}>{item.title}</span>
+                    </div>
+                    {isCollapsed && (
+                      <span className={tooltipClasses}>{item.title}</span>
+                    )}
+                  </Link>
+
+                  {/* Cerca */}
+                  {item.title === "Dashboard" && (
+                    <button className={cn(
+                      "flex items-center h-8 text-[13px] text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors rounded-md group w-full border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 relative",
+                      isCollapsed ? "justify-center w-8 mx-auto px-0" : "px-2"
+                    )}>
+                      <Search className={cn("w-4 h-4 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors", !isCollapsed && "mr-2.5")} strokeWidth={1.5} />
+                      <span className={cn(isCollapsed && "hidden")}>Cerca</span>
+                      <div className={cn("ml-auto flex items-center gap-1", isCollapsed && "hidden")}>
+                        <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">⌘</kbd>
+                        <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">K</kbd>
+                      </div>
+                      {isCollapsed && (
+                        <span className={tooltipClasses}>Cerca</span>
+                      )}
+                    </button>
+                  )}
+
+                  {/* Submenu */}
+                  {item.submenu && !isCollapsed && (
+                    <div className={cn("overflow-hidden transition-all", isAccordionOpen ? "max-h-[500px]" : "max-h-0")}>
+                      <ul className="flex flex-col gap-0.5 pt-0.5 pb-1">
+                        {item.submenu.map((subItem) => {
+                          const subActive = location.pathname === subItem.path
+                          return (
+                            <li key={subItem.title}>
+                              <Link
+                                to={subItem.path}
+                                className={cn(
+                                  "block w-full pl-[34px] pr-2 py-1.5 text-[13px] rounded-md transition-colors",
+                                  subActive ? "text-zinc-900 dark:text-zinc-50 font-medium bg-zinc-100/50 dark:bg-[#27272A]/50" : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-[#27272A]"
+                                )}
+                              >
+                                {subItem.title}
+                              </Link>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+            
+            <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
+            
+            <Link to="/vendor/connect" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "w-full px-2 py-1.5 text-[13px]")}>
+              <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
+                <Box className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
+                <span className={cn(isCollapsed && "hidden")}>Ida Connect</span>
+              </div>
+              {isCollapsed && (
+                <span className={tooltipClasses}>Ida Connect</span>
+              )}
+            </Link>
+            
+            <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
+
+            <Link to="/vendor/extensions" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0" : "justify-between w-full px-2 py-1.5 text-[13px]")}>
+              <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
+                <Puzzle className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
+                <span className={cn(isCollapsed && "hidden")}>Estensioni</span>
+              </div>
+              {!isCollapsed && (
+                 <ChevronDown className="w-4 h-4 text-zinc-400 group-hover:text-zinc-500 transition-transform" strokeWidth={1.5} />
+              )}
+              {isCollapsed && (
+                <span className={tooltipClasses}>Estensioni</span>
+              )}
+            </Link>
+          </>
         )}
       </div>
 
-      {/* 3. MAIN NAVIGATION */}
-      <nav className="flex-1 overflow-y-auto px-3 py-1 flex flex-col gap-0.5 custom-scrollbar">
-
-        {/* Renderizza il menu */}
-        {menuItems.map((item) => {
-          const active = isActive(item.path)
-          const isAccordionOpen = openMenu === item.title
-
-          return (
-            <div key={item.title}>
-              <Link
-                to={item.path}
-                onClick={() => {
-                  if (item.submenu) {
-                    setOpenMenu(isAccordionOpen ? "" : item.title)
-                  } else {
-                    setOpenMenu("")
-                  }
-                }}
-                className={cn(
-                  "flex items-center transition-all rounded-md group",
-                  isCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "justify-between w-full px-2 py-1.5 text-[13px]",
-                  active 
-                    ? "bg-white dark:bg-[#27272A] border border-zinc-200/60 dark:border-zinc-700 shadow-sm text-zinc-900 dark:text-zinc-50 font-medium" 
-                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent"
-                )}
-              >
-                <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-                  <item.icon className={cn("w-4 h-4", active ? "text-zinc-900 dark:text-zinc-50" : "text-zinc-500")} strokeWidth={1.5} />
-                  <span className={cn(isCollapsed && "hidden")}>{item.title}</span>
-                </div>
-              </Link>
-
-              {/* PULSANTE SEARCH INSERITO SUBITO DOPO DASHBOARD */}
-              {item.title === "Dashboard" && (
-                <button className={cn(
-                  "flex items-center py-1.5 text-[13px] text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors rounded-md group w-full mb-1 border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700",
-                  isCollapsed ? "justify-center w-8 h-8 mx-auto px-0" : "px-2"
-                )}>
-                  <Search className={cn("w-4 h-4 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors", !isCollapsed && "mr-2.5")} strokeWidth={1.5} />
-                  <span className={cn(isCollapsed && "hidden")}>Search</span>
-                  <div className={cn("ml-auto flex items-center gap-1", isCollapsed && "hidden")}>
-                    <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">⌘</kbd>
-                    <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">K</kbd>
-                  </div>
-                </button>
-              )}
-
-              {/* Submenu */}
-              {item.submenu && !isCollapsed && (
-                <div className={cn("overflow-hidden transition-all", isAccordionOpen ? "max-h-[500px]" : "max-h-0")}>
-                  <ul className="flex flex-col gap-0.5 pt-0.5 pb-1">
-                    {item.submenu.map((subItem) => {
-                      const subActive = location.pathname === subItem.path
-                      return (
-                        <li key={subItem.title}>
-                          <Link
-                            to={subItem.path}
-                            className={cn(
-                              "block w-full pl-[34px] pr-2 py-1.5 text-[13px] rounded-md transition-colors",
-                              subActive ? "text-zinc-900 dark:text-zinc-50 font-medium bg-zinc-100/50 dark:bg-[#27272A]/50" : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-[#27272A]"
-                            )}
-                          >
-                            {subItem.title}
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )
-        })}
-        
-        <div className="mx-4 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
-        
-        <Link to="/vendor/connect" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "w-full px-2 py-1.5 text-[13px]")}>
-          <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-            <Box className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-            <span className={cn(isCollapsed && "hidden")}>Mercur Connect</span>
-          </div>
-        </Link>
-        
-        <Link to="/vendor/extensions" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0" : "justify-between w-full px-2 py-1.5 text-[13px]")}>
-          <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-            <Puzzle className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-            <span className={cn(isCollapsed && "hidden")}>Extensions</span>
-          </div>
-        </Link>
-      </nav>
-
-      {/* 4. BOTTOM SECTION: Avatar e Inbox */}
+      {/* 4. BOTTOM SECTION: Avatar e Impostazioni */}
       <div className={cn("mt-auto px-3 pb-3 pt-2 flex", isCollapsed ? "flex-col items-center gap-3" : "flex-col gap-1")}>
         
-        <Link to="/vendor/settings" className={cn("flex items-center transition-all rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent", isCollapsed ? "justify-center w-8 h-8 p-0" : "w-full px-2 py-1.5 text-[13px] gap-2.5")}>
+        <Link to="/vendor/settings" className={cn("flex items-center transition-all rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent group relative", isCollapsed ? "justify-center w-8 h-8 p-0" : "w-full px-2 py-1.5 text-[13px] gap-2.5")}>
           <Settings className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-          <span className={cn(isCollapsed && "hidden")}>Settings</span>
+          <span className={cn(isCollapsed && "hidden")}>Impostazioni</span>
+          {isCollapsed && (
+            <span className={tooltipClasses}>Impostazioni</span>
+          )}
         </Link>
 
-        <div className={cn("border-b border-dotted border-zinc-300 dark:border-zinc-700", isCollapsed ? "w-full my-1" : "mx-2 my-1")} />
+        <div className={cn("border-b border-dotted border-zinc-300 dark:border-zinc-700", isCollapsed ? "w-full my-1" : "mx-1 my-1")} />
 
         {/* Wrapper flessibile per Avatar e Inbox */}
-        <div className={cn("flex w-full", isCollapsed ? "flex-col items-center gap-3" : "items-center justify-between px-1")}>
+        <div className={cn("flex w-full relative", isCollapsed ? "flex-col items-center gap-3" : "items-center justify-between px-1")} ref={userMenuRef}>
           
-          {/* Bottone Avatar Singolo */}
-          <button className="flex items-center justify-center rounded-full hover:ring-2 hover:ring-zinc-200 dark:hover:ring-zinc-700 transition-all outline-none">
-            <span className="flex shrink-0 items-center justify-center overflow-hidden shadow-borders-base bg-ui-bg-base rounded-full h-7 w-7">
-              <img 
-                src="https://i.pravatar.cc/150?u=kai" 
-                alt="Avatar" 
-                className="aspect-square object-cover object-center rounded-full txt-compact-small-plus size-6"
-              />
-            </span>
-          </button>
+          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-start w-full px-1")}>
+            <button 
+              onClick={(e) => { e.preventDefault(); setIsUserMenuOpen(!isUserMenuOpen); }}
+              className="flex items-center justify-center rounded-full hover:ring-2 hover:ring-zinc-200 dark:hover:ring-zinc-700 transition-all outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            >
+              <span className="flex shrink-0 items-center justify-center overflow-hidden shadow-borders-base bg-zinc-200 dark:bg-zinc-800 rounded-full h-7 w-7">
+                <img alt="Avatar" className="aspect-square object-cover object-center rounded-full size-6" src="https://i.pravatar.cc/150?u=kai" />
+              </span>
+            </button>
+          </div>
 
-          {/* Bottone Inbox (sempre visibile, ridotto a 16x16) */}
-          <button className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors relative">
+          {/* MENU A TENDINA UTENTE - POSITION FIXED A SIDEBAR CHIUSA */}
+          {isUserMenuOpen && (
+             <div className="absolute left-0 bottom-[calc(100%+8px)] z-[9999] w-[224px] rounded-xl bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 shadow-lg p-1.5 animate-in fade-in zoom-in-95 duration-100 flex flex-col overflow-hidden">
+               
+               {/* Vista Principale del Menu */}
+               {userMenuView === 'main' ? (
+                 <>
+                   <a className="flex items-center gap-2.5 px-2 py-2 pb-3 hover:bg-zinc-100 dark:hover:bg-[#323236] rounded-lg transition-colors cursor-pointer group" href="/profile">
+                     <span className="relative flex overflow-hidden rounded-full items-center text-xs size-8 shrink-0 border border-zinc-200 dark:border-zinc-700 group-hover:border-zinc-300 dark:group-hover:border-zinc-600 transition-colors">
+                       <img className="h-full w-full aspect-auto object-cover" src="https://i.pravatar.cc/150?u=kai" />
+                     </span>
+                     <div className="min-w-0 flex-1">
+                       <p className="truncate text-[13px] font-medium text-zinc-900 dark:text-zinc-50">admin@acmecorp.com</p>
+                     </div>
+                   </a>
+                   
+                   <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-1.5" />
+                   
+                   <div className="flex flex-col gap-0.5">
+                     <a className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]" href="/profile">
+                       <UserPlus className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Profilo</span>
+                     </a>
+                     <Link to="/vendor/settings/profile" onClick={() => setIsUserMenuOpen(false)} className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]">
+                       <Settings className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Impostazioni</span>
+                       <span className="ml-auto hidden sm:flex">
+                         <kbd className="inline-flex min-w-4 items-center justify-center gap-0.5 rounded border font-sans text-[10px] leading-none border-transparent bg-zinc-200/50 dark:bg-[#18181B] p-0.5 opacity-60 px-1">⌘.</kbd>
+                       </span>
+                     </Link>
+                     <button 
+                       onClick={() => setUserMenuView('appearance')}
+                       className="relative flex w-full cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]"
+                     >
+                       <Monitor className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Aspetto</span>
+                       <ChevronRight className="size-4 shrink-0 ml-auto opacity-50" strokeWidth={1.5} />
+                     </button>
+                     <div className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]">
+                       <LifeBuoy className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Supporto</span>
+                       <ExternalLink className="size-3.5 shrink-0 ml-auto opacity-50" strokeWidth={1.5} />
+                     </div>
+                     <div className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]">
+                       <FileText className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Documentazione</span>
+                       <ExternalLink className="size-3.5 shrink-0 ml-auto opacity-50" strokeWidth={1.5} />
+                     </div>
+                   </div>
+                   
+                   <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-1.5" />
+                   
+                   <div className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-red-600 dark:hover:text-red-400 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-red-50 dark:hover:bg-red-900/20">
+                     <LogOut className="size-4 shrink-0" strokeWidth={1.5} />
+                     <span>Esci</span>
+                   </div>
+                 </>
+               ) : (
+                 /* Vista "Appearance" Drill-down */
+                 <div className="flex flex-col animate-in slide-in-from-right-4 duration-200">
+                   <div className="flex items-center gap-2 px-1 py-1 mb-1">
+                     <button 
+                       onClick={() => setUserMenuView('main')}
+                       className="p-1 rounded-md hover:bg-zinc-100 dark:hover:bg-[#323236] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+                     >
+                       <ChevronLeft className="size-4" strokeWidth={1.5} />
+                     </button>
+                     <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-50">Aspetto</span>
+                   </div>
+                   
+                   <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-1.5" />
+                   
+                   <div className="flex flex-col gap-0.5 mt-1 pb-1">
+                     <button 
+                       onClick={() => setTheme('light')}
+                       className="relative flex w-full cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]"
+                     >
+                       <Sun className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Chiaro</span>
+                       {theme === 'light' && <Check className="size-4 shrink-0 ml-auto" strokeWidth={2} />}
+                     </button>
+                     <button 
+                       onClick={() => setTheme('dark')}
+                       className="relative flex w-full cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]"
+                     >
+                       <Moon className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Scuro</span>
+                       {theme === 'dark' && <Check className="size-4 shrink-0 ml-auto" strokeWidth={2} />}
+                     </button>
+                     <button 
+                       onClick={() => setTheme('system')}
+                       className="relative flex w-full cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]"
+                     >
+                       <Monitor className="size-4 shrink-0" strokeWidth={1.5} />
+                       <span>Sistema</span>
+                       {theme === 'system' && <Check className="size-4 shrink-0 ml-auto" strokeWidth={2} />}
+                     </button>
+                   </div>
+                 </div>
+               )}
+             </div>
+          )}
+
+          {/* Bottone Inbox */}
+          <button className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 group">
             <InboxIcon />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full ring-2 ring-white dark:ring-[#18181B]"></span>
+            {isCollapsed && (
+              <span className={tooltipClasses}>Inbox</span>
+            )}
           </button>
 
         </div>

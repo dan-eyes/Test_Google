@@ -1,16 +1,16 @@
 export function VendorImports() {
-  const surfaceButtonClass = "flex items-center justify-center px-3 py-1.5 text-[13px] font-medium bg-white dark:bg-[#18181B] border border-zinc-200 dark:border-zinc-700 rounded-md text-zinc-900 dark:text-zinc-50 hover:bg-zinc-50 dark:hover:bg-[#27272A] transition-colors shadow-sm"
+  const primaryButtonClass = "bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 text-[13px] font-medium px-4 py-2 rounded-md shadow-sm transition-colors"
 
   return (
     <div className="bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm w-full h-[calc(100vh-32px)] flex flex-col overflow-hidden animate-in fade-in duration-300">
         <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-700 flex items-center justify-between bg-white dark:bg-[#27272A]">
-          <h1 className="text-[16px] font-semibold text-zinc-900 dark:text-zinc-50 tracking-tight">Imports</h1>
-          <button className={surfaceButtonClass}>
+          <h1 className="text-[14px] font-semibold text-zinc-900 dark:text-zinc-50 tracking-tight">Imports</h1>
+          <button className={primaryButtonClass}>
             New Import
           </button>
         </div>
-        <div className="flex-1 p-6 bg-zinc-50/50 dark:bg-transparent">
-          <p className="text-[13px] text-zinc-500">Contenuto della pagina in costruzione...</p>
+        <div className="flex-1 p-6 bg-white dark:bg-[#27272A]">
+          <p className="text-[13px] text-zinc-500 dark:text-zinc-400">Contenuto della pagina in costruzione...</p>
         </div>
       </div>
   )
