@@ -1,4 +1,4 @@
-import { Search, Settings, PanelLeft, ShoppingCart, Tag, Building2, Users, TicketPercent, CircleDollarSign, RefreshCcw, LayoutGrid, Plug, ChevronDown, UserPlus, Zap, ChevronRight, Plus, Globe, Check, LogOut, Monitor, ExternalLink, LifeBuoy, FileText, Sun, Moon, ChevronLeft, CornerUpLeft } from "lucide-react"
+import { Search, Settings, PanelLeft, ShoppingCart, Tag, Building2, Users, TicketPercent, CircleDollarSign, RefreshCcw, LayoutGrid, Plug, ChevronDown, UserPlus, Zap, ChevronRight, Plus, Globe, Check, LogOut, Monitor, ExternalLink, LifeBuoy, FileText, Sun, Moon, ChevronLeft, CornerUpLeft, Sparkles, Mail, Rocket } from "lucide-react"
 import { Link, useLocation } from "@tanstack/react-router"
 import { cn } from "../../lib/utils"
 import { useState, useEffect, useRef } from "react"
@@ -48,25 +48,27 @@ const InboxIcon = ({ className }: { className?: string }) => (
 
 const menuItems = [
   { title: "Dashboard", icon: DiamondGridIcon, path: "/vendor" },
-  { title: "Ordini", icon: ShoppingCart, path: "/vendor/orders" },
+  { title: "Ordini", icon: ShoppingCart, path: "/vendor/orders", isComingSoon: true },
   { 
     title: "Prodotti", 
     icon: Tag, 
     path: "/vendor/products",
+    isComingSoon: true,
     submenu: [
       { title: "Collezioni", path: "/vendor/products/collections" },
       { title: "Categorie", path: "/vendor/products/categories" },
       { title: "Importazioni", path: "/vendor/products/imports" },
     ]
   },
-  { title: "Inventario", icon: Building2, path: "/vendor/inventory" },
-  { title: "Clienti", icon: Users, path: "/vendor/customers" },
-  { title: "Promozioni", icon: TicketPercent, path: "/vendor/promotions" },
-  { title: "Listini", icon: CircleDollarSign, path: "/vendor/price-lists" },
-  { title: "Richieste", icon: RefreshCcw, path: "/vendor/requests" },
+  { title: "Inventario", icon: Building2, path: "/vendor/inventory", isComingSoon: true },
+  { title: "Clienti", icon: Users, path: "/vendor/customers", isComingSoon: true },
+  { title: "Promozioni", icon: TicketPercent, path: "/vendor/promotions", isComingSoon: true },
+  { title: "Listini", icon: CircleDollarSign, path: "/vendor/price-lists", isComingSoon: true },
+  { title: "Richieste", icon: RefreshCcw, path: "/vendor/requests", isComingSoon: true },
 ]
 
 export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean, toggleSidebar: () => void }) {
+  const [comingSoonTarget, setComingSoonTarget] = useState<string | null>(null);
   const location = useLocation()
   const isActive = (path: string) => location.pathname === path || (path !== "/vendor" && location.pathname.startsWith(path))
   const [openMenu, setOpenMenu] = useState<string>(location.pathname.includes("/vendor/products") ? "Products" : "")
@@ -86,6 +88,7 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   const isSettings = location.pathname.startsWith("/vendor/settings");
+  const displayCollapsed = isSettings ? false : isCollapsed;
 
   useClickOutside(workspaceRef, () => setIsWorkspaceOpen(false))
   useClickOutside(userMenuRef, () => {
@@ -110,16 +113,17 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
   const tooltipClasses = "absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-[12px] font-medium rounded shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-[9999] pointer-events-none";
 
   return (
+    <>
     <aside className={cn(
       "flex-shrink-0 flex flex-col h-full bg-white dark:bg-[#18181B] border-r border-zinc-200 dark:border-zinc-700 transition-all duration-300 relative z-[200]",
-      isCollapsed ? "w-[68px] overflow-visible" : "w-[240px]"
+      displayCollapsed ? "w-[68px] overflow-visible" : "w-[240px]"
     )}>
       
       {/* 1. STORE SELECTOR & TOGGLE */}
       {!isSettings && (
-        <div className={cn("pt-4 pb-2 flex-shrink-0 relative", isCollapsed ? "px-0" : "px-3")}>
-          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-between")}>
-            {isCollapsed ? (
+        <div className={cn("pt-4 pb-2 flex-shrink-0 relative", displayCollapsed ? "px-0" : "px-3")}>
+          <div className={cn("flex items-center", displayCollapsed ? "justify-center" : "justify-between")}>
+            {displayCollapsed ? (
               <button 
                 onClick={(e) => { e.preventDefault(); toggleSidebar(); }}
                 className="relative flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] transition-colors group"
@@ -150,29 +154,29 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
       )}
 
       {/* 2. MAIN NAVIGATION E WORKSPACE SWITCHER */}
-      <div className={cn("flex-1 px-3 py-1 flex flex-col gap-0.5 custom-scrollbar", isCollapsed ? "overflow-visible" : "overflow-y-auto relative")}>
+      <div className={cn("flex-1 px-3 py-1 flex flex-col gap-0.5 custom-scrollbar", displayCollapsed ? "overflow-visible" : "overflow-y-auto relative")}>
         
         {/* WORKSPACE SWITCHER DROPDOWN */}
         {!isSettings && (
           <>
-            <div className={cn("mt-1.5 relative w-full", isCollapsed && "flex justify-center")} ref={workspaceRef}>
+            <div className={cn("mt-1.5 relative w-full", displayCollapsed && "flex justify-center")} ref={workspaceRef}>
               <button 
                 onClick={(e) => { e.preventDefault(); setIsWorkspaceOpen(!isWorkspaceOpen); }}
                 className={cn(
                   "flex items-center justify-between w-full h-8 rounded-md text-zinc-900 dark:text-zinc-50 bg-zinc-50 dark:bg-[#27272A]/50 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-blue-500",
-                  isCollapsed ? "justify-center w-8 mx-auto" : "px-2",
+                  displayCollapsed ? "justify-center w-8 mx-auto" : "px-2",
                   isWorkspaceOpen && "bg-zinc-100 dark:bg-[#27272A] border-zinc-200/60 dark:border-zinc-700"
                 )}
               >
-                <div className={cn("flex items-center gap-2.5", isCollapsed && "gap-0")}>
+                <div className={cn("flex items-center gap-2.5", displayCollapsed && "gap-0")}>
                   <div className="size-5 rounded-md bg-red-600 flex items-center justify-center text-white shadow-inner shrink-0">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="size-3"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                   </div>
-                  <span className={cn("text-[13px] font-medium text-zinc-900 dark:text-zinc-50 truncate", isCollapsed && "hidden")}>
+                  <span className={cn("text-[13px] font-medium text-zinc-900 dark:text-zinc-50 truncate", displayCollapsed && "hidden")}>
                     Brembo S.p.A.
                   </span>
                 </div>
-                {!isCollapsed && (
+                {!displayCollapsed && (
                   <ChevronDown className={cn("w-4 h-4 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-transform shrink-0", isWorkspaceOpen && "rotate-180")} strokeWidth={1.5} />
                 )}
               </button>
@@ -236,8 +240,6 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
                   {[
                     { title: "Store", path: "/vendor/settings" },
                     { title: "Team", path: "/vendor/settings/team" },
-                    { title: "Tipi di prodotto", path: "/vendor/settings/product-types" },
-                    { title: "Tag prodotto", path: "/vendor/settings/product-tags" },
                     { title: "Sedi e spedizioni", path: "/vendor/settings/locations" }
                   ].map(item => (
                     <Link key={item.title} to={item.path} className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === item.path ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#323236]")}>{item.title}</Link>
@@ -266,7 +268,12 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
                 <div key={item.title} className="flex flex-col gap-0.5">
                   <Link
                     to={item.path}
-                    onClick={() => {
+                    onClick={(e) => {
+                      if (item.isComingSoon) {
+                        e.preventDefault();
+                        setComingSoonTarget(item.title);
+                        return; // Fondamentale: ferma l'esecuzione qui
+                      }
                       if (item.submenu) {
                         setOpenMenu(isAccordionOpen ? "" : item.title)
                       } else {
@@ -275,17 +282,22 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
                     }}
                     className={cn(
                       "flex items-center transition-all rounded-md group h-8 relative",
-                      isCollapsed ? "justify-center w-8 mx-auto p-0 mb-1" : "justify-between w-full px-2 text-[13px]",
+                      displayCollapsed ? "justify-center w-8 mx-auto p-0 mb-1" : "justify-between w-full px-2 text-[13px]",
                       active 
                         ? "bg-white dark:bg-[#27272A] border border-zinc-200/60 dark:border-zinc-700 shadow-sm text-zinc-900 dark:text-zinc-50 font-medium" 
                         : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent"
                     )}
                   >
-                    <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-                      <item.icon className={cn("w-4 h-4", active ? "text-zinc-900 dark:text-zinc-50" : "text-zinc-500")} strokeWidth={1.5} />
-                      <span className={cn(isCollapsed && "hidden")}>{item.title}</span>
+                    <div className={cn("flex items-center", displayCollapsed ? "justify-center w-full" : "w-full justify-between")}>
+                      <div className={cn("flex items-center", !displayCollapsed && "gap-2.5")}>
+                        <item.icon className={cn("w-4 h-4 shrink-0", active ? "text-zinc-900 dark:text-zinc-50" : "text-zinc-500")} strokeWidth={1.5} />
+                        {!displayCollapsed && <span>{item.title}</span>}
+                      </div>
+                      {!displayCollapsed && item.isComingSoon && (
+                        <Rocket className="w-3.5 h-3.5 text-blue-500/70 dark:text-blue-400/70 shrink-0" strokeWidth={1.5} />
+                      )}
                     </div>
-                    {isCollapsed && (
+                    {displayCollapsed && (
                       <span className={tooltipClasses}>{item.title}</span>
                     )}
                   </Link>
@@ -294,22 +306,24 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
                   {item.title === "Dashboard" && (
                     <button className={cn(
                       "flex items-center h-8 text-[13px] text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors rounded-md group w-full border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 relative",
-                      isCollapsed ? "justify-center w-8 mx-auto px-0" : "px-2"
+                      displayCollapsed ? "justify-center w-8 mx-auto px-0" : "px-2"
                     )}>
-                      <Search className={cn("w-4 h-4 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors", !isCollapsed && "mr-2.5")} strokeWidth={1.5} />
-                      <span className={cn(isCollapsed && "hidden")}>Cerca</span>
-                      <div className={cn("ml-auto flex items-center gap-1", isCollapsed && "hidden")}>
-                        <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">⌘</kbd>
-                        <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">K</kbd>
-                      </div>
-                      {isCollapsed && (
+                      <Search className={cn("w-4 h-4 shrink-0 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors", !displayCollapsed && "mr-2.5")} strokeWidth={1.5} />
+                      {!displayCollapsed && <span>Cerca</span>}
+                      {!displayCollapsed && (
+                        <div className="ml-auto flex items-center gap-1">
+                          <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">⌘</kbd>
+                          <kbd className="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] font-sans text-zinc-500 font-medium">K</kbd>
+                        </div>
+                      )}
+                      {displayCollapsed && (
                         <span className={tooltipClasses}>Cerca</span>
                       )}
                     </button>
                   )}
 
                   {/* Submenu */}
-                  {item.submenu && !isCollapsed && (
+                  {item.submenu && !displayCollapsed && (
                     <div className={cn("overflow-hidden transition-all", isAccordionOpen ? "max-h-[500px]" : "max-h-0")}>
                       <ul className="flex flex-col gap-0.5 pt-0.5 pb-1">
                         {item.submenu.map((subItem) => {
@@ -337,24 +351,34 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
             
             <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
             
-            <Link to="/vendor/apps" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "w-full px-2 py-1.5 text-[13px]")}>
-              <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-                <LayoutGrid className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-                <span className={cn(isCollapsed && "hidden")}>Ida App & Servizi</span>
+            <Link to="/vendor/apps" onClick={(e) => { e.preventDefault(); setComingSoonTarget("Ida App & Servizi"); }} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", displayCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "w-full px-2 py-1.5 text-[13px]")}>
+              <div className={cn("flex items-center", displayCollapsed ? "justify-center w-full" : "w-full justify-between")}>
+                <div className={cn("flex items-center", !displayCollapsed && "gap-2.5")}>
+                  <LayoutGrid className="w-4 h-4 shrink-0 text-zinc-500" strokeWidth={1.5} />
+                  {!displayCollapsed && <span>Ida App & Servizi</span>}
+                </div>
+                {!displayCollapsed && (
+                  <Rocket className="w-3.5 h-3.5 text-blue-500/70 dark:text-blue-400/70 shrink-0" strokeWidth={1.5} />
+                )}
               </div>
-              {isCollapsed && (
+              {displayCollapsed && (
                 <span className={tooltipClasses}>Ida App & Servizi</span>
               )}
             </Link>
             
             <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
 
-            <Link to="/vendor/integrations" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0" : "w-full px-2 py-1.5 text-[13px]")}>
-              <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-                <Plug className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-                <span className={cn(isCollapsed && "hidden")}>Integrazioni</span>
+            <Link to="/vendor/integrations" onClick={(e) => { e.preventDefault(); setComingSoonTarget("Integrazioni"); }} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", displayCollapsed ? "justify-center w-8 h-8 mx-auto p-0" : "w-full px-2 py-1.5 text-[13px]")}>
+              <div className={cn("flex items-center", displayCollapsed ? "justify-center w-full" : "w-full justify-between")}>
+                <div className={cn("flex items-center", !displayCollapsed && "gap-2.5")}>
+                  <Plug className="w-4 h-4 shrink-0 text-zinc-500" strokeWidth={1.5} />
+                  {!displayCollapsed && <span>Integrazioni</span>}
+                </div>
+                {!displayCollapsed && (
+                  <Rocket className="w-3.5 h-3.5 text-blue-500/70 dark:text-blue-400/70 shrink-0" strokeWidth={1.5} />
+                )}
               </div>
-              {isCollapsed && (
+              {displayCollapsed && (
                 <span className={tooltipClasses}>Integrazioni</span>
               )}
             </Link>
@@ -363,22 +387,22 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
       </div>
 
       {/* 4. BOTTOM SECTION: Avatar e Impostazioni */}
-      <div className={cn("mt-auto px-3 pb-3 pt-2 flex", isCollapsed ? "flex-col items-center gap-3" : "flex-col gap-1")}>
+      <div className={cn("mt-auto px-3 pb-3 pt-2 flex", displayCollapsed ? "flex-col items-center gap-3" : "flex-col gap-1")}>
         
-        <Link to="/vendor/settings" className={cn("flex items-center transition-all rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent group relative", isCollapsed ? "justify-center w-8 h-8 p-0" : "w-full px-2 py-1.5 text-[13px] gap-2.5")}>
-          <Settings className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-          <span className={cn(isCollapsed && "hidden")}>Impostazioni</span>
-          {isCollapsed && (
+        <Link to="/vendor/settings" className={cn("flex items-center transition-all rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent group relative", displayCollapsed ? "justify-center w-8 h-8 p-0" : "w-full px-2 py-1.5 text-[13px] gap-2.5")}>
+          <Settings className="w-4 h-4 shrink-0 text-zinc-500" strokeWidth={1.5} />
+          {!displayCollapsed && <span>Impostazioni</span>}
+          {displayCollapsed && (
             <span className={tooltipClasses}>Impostazioni</span>
           )}
         </Link>
 
-        <div className={cn("border-b border-dotted border-zinc-300 dark:border-zinc-700", isCollapsed ? "w-full my-1" : "mx-1 my-1")} />
+        <div className={cn("border-b border-dotted border-zinc-300 dark:border-zinc-700", displayCollapsed ? "w-full my-1" : "mx-1 my-1")} />
 
         {/* Wrapper flessibile per Avatar e Inbox */}
-        <div className={cn("flex w-full relative", isCollapsed ? "flex-col items-center gap-3" : "items-center justify-between px-1")} ref={userMenuRef}>
+        <div className={cn("flex w-full relative", displayCollapsed ? "flex-col items-center gap-3" : "items-center justify-between px-1")} ref={userMenuRef}>
           
-          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "w-full justify-start")}>
+          <div className={cn("flex items-center", displayCollapsed ? "justify-center" : "w-full justify-start")}>
             <button 
               onClick={(e) => { e.preventDefault(); setIsUserMenuOpen(!isUserMenuOpen); }}
               className="flex items-center justify-center rounded-full hover:ring-2 hover:ring-zinc-200 dark:hover:ring-zinc-700 transition-all outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
@@ -489,7 +513,7 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
           <button className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 group">
             <InboxIcon />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full ring-2 ring-white dark:ring-[#18181B]"></span>
-            {isCollapsed && (
+            {displayCollapsed && (
               <span className={tooltipClasses}>Inbox</span>
             )}
           </button>
@@ -497,5 +521,49 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
         </div>
       </div>
     </aside>
+    {comingSoonTarget && (
+      <div className="fixed inset-0 z-[99999] flex items-center justify-center animate-in fade-in duration-200">
+        {/* Sfondo sfocato */}
+        <div className="absolute inset-0 bg-zinc-900/40 backdrop-blur-md" onClick={() => setComingSoonTarget(null)} />
+        
+        {/* Pop-up Card Centrata */}
+        <div className="relative bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-2xl p-8 w-full max-w-[560px] flex flex-col items-center text-center animate-in zoom-in-95 duration-200 mx-4">
+          
+          {/* Icona in alto al centro */}
+          <div className="size-14 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center shadow-sm mb-5">
+            <Sparkles className="size-6 text-blue-600 dark:text-blue-400" strokeWidth={2} />
+          </div>
+          
+          {/* Colonna Contenuti */}
+          <div className="flex flex-col items-center w-full">
+            <h3 className="text-[17px] font-semibold text-zinc-900 dark:text-zinc-50 mb-3">
+              Rilascio Progressivo – Programma Pilot
+            </h3>
+            <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mb-8 leading-relaxed max-w-[480px]">
+              In qualità di Seller Pilot hai accesso in anteprima esclusiva a Ida Export Suite.<br /><br />
+              Le funzionalità verranno abilitate progressivamente secondo una roadmap dedicata, così potrai configurare ogni dettaglio con la massima cura.<br />
+              Ti avviseremo a ogni aggiornamento: avrai tutto il tempo per preparare il tuo spazio ed essere pronto al lancio del marketplace, con tutto il necessario per far crescere il tuo export.
+            </p>
+            
+            {/* Bottoni (One-line, centrati e affiancati) */}
+            <div className="flex flex-row justify-center gap-3 w-full">
+              <button 
+                onClick={() => setComingSoonTarget(null)} 
+                className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 text-[13px] font-medium px-5 py-2.5 rounded-md transition-colors shadow-sm whitespace-nowrap"
+              >
+                Continua la configurazione
+              </button>
+              <a 
+                href="mailto:support@tuodominio.com" 
+                className="flex items-center justify-center gap-2 bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50 dark:bg-transparent dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-[#323236] text-[13px] font-medium px-5 py-2.5 rounded-md transition-colors shadow-sm whitespace-nowrap"
+              >
+                <Mail className="size-4" strokeWidth={1.5} /> Parla con il team
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   )
 }
