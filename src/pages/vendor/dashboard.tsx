@@ -35,7 +35,7 @@ export function VendorDashboard() {
             <h2 className="text-[14px] font-semibold text-zinc-900 dark:text-zinc-50 mb-1">Analisi Real-time</h2>
             <p className="text-[13px] text-zinc-500 dark:text-zinc-400">Visualizza i progressi del tuo negozio</p>
           </div>
-          <button className="bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50 dark:bg-transparent dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-[#323236] text-[13px] font-medium px-3 py-1.5 rounded-md transition-colors shadow-sm flex items-center">
+          <button className="bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50 shadow-sm dark:bg-transparent dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-white/5 transition-colors text-[13px] font-medium px-3 py-1.5 rounded-md flex items-center">
             <Calendar className="w-4 h-4 mr-2 text-zinc-400" strokeWidth={1.5} />
             Jul 08, 2025 - Jul 15, 2025
           </button>

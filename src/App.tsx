@@ -34,8 +34,8 @@ import { VendorSettingsProductTypes } from "@/pages/vendor/settings/product-type
 import { VendorSettingsProductTags } from "@/pages/vendor/settings/product-tags"
 import { VendorSettingsLocations } from "@/pages/vendor/settings/locations"
 import { VendorSettingsProfile } from "@/pages/vendor/settings/profile"
-import { VendorConnect } from "@/pages/vendor/connect"
-import { VendorExtensions } from "@/pages/vendor/extensions"
+import { VendorApps } from "@/pages/vendor/apps"
+import { VendorIntegrations } from "@/pages/vendor/integrations"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
 
 import { ThemeProvider } from "@/components/ui/theme-provider"
@@ -201,16 +201,16 @@ const vendorSettingsProfileRoute = createRoute({
   component: VendorSettingsProfile,
 })
 
-const vendorConnectRoute = createRoute({
+const vendorAppsRoute = createRoute({
   getParentRoute: () => vendorLayoutRoute,
-  path: "/connect",
-  component: VendorConnect,
+  path: "/apps",
+  component: VendorApps,
 })
 
-const vendorExtensionsRoute = createRoute({
+const vendorIntegrationsRoute = createRoute({
   getParentRoute: () => vendorLayoutRoute,
-  path: "/extensions",
-  component: VendorExtensions,
+  path: "/integrations",
+  component: VendorIntegrations,
 })
 
 const pricingRoute = createRoute({
@@ -278,8 +278,8 @@ const routeTree = rootRoute.addChildren([
       vendorSettingsLocationsRoute,
       vendorSettingsProfileRoute,
     ]),
-    vendorConnectRoute,
-    vendorExtensionsRoute,
+    vendorAppsRoute,
+    vendorIntegrationsRoute,
   ]),
   loginRoute,
   docsLayoutRoute.addChildren([docsRoute, docsPageRoute]),

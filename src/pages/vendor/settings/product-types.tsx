@@ -11,8 +11,8 @@ export function VendorSettingsProductTypes() {
         <p className="text-[13px] text-zinc-500 dark:text-zinc-400 max-w-sm mb-6">
           I tipi di prodotto ti aiutano a categorizzare i prodotti. Non hai ancora creato alcun tipo di prodotto.
         </p>
-        <button className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 text-[13px] font-medium px-4 py-2 rounded-md shadow-sm transition-colors">
-          Crea Tipo di Prodotto
+        <button className="bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors text-[13px] font-medium px-4 py-2 rounded-md">
+          Crea tipo di prodotto
         </button>
       </div>
     </div>

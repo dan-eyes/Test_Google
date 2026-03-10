@@ -9,8 +9,8 @@ export function VendorSettingsLocations() {
             <h2 className="text-[14px] font-semibold text-zinc-900 dark:text-zinc-50">Sedi</h2>
             <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-0.5">Gestisci le tue sedi di evasione</p>
           </div>
-          <button className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 text-[13px] font-medium px-4 py-2 rounded-md shadow-sm transition-colors">
-            Aggiungi Sede
+          <button className="bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors text-[13px] font-medium px-4 py-2 rounded-md">
+            Aggiungi sede
           </button>
         </div>
         

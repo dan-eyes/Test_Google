@@ -1,4 +1,4 @@
-import { Search, Settings, PanelLeft, ShoppingCart, Tag, Building2, Users, TicketPercent, CircleDollarSign, RefreshCcw, Box, Puzzle, ChevronDown, UserPlus, Zap, ChevronRight, Plus, Globe, Check, LogOut, Monitor, ExternalLink, LifeBuoy, FileText, Sun, Moon, ChevronLeft } from "lucide-react"
+import { Search, Settings, PanelLeft, ShoppingCart, Tag, Building2, Users, TicketPercent, CircleDollarSign, RefreshCcw, LayoutGrid, Plug, ChevronDown, UserPlus, Zap, ChevronRight, Plus, Globe, Check, LogOut, Monitor, ExternalLink, LifeBuoy, FileText, Sun, Moon, ChevronLeft, CornerUpLeft } from "lucide-react"
 import { Link, useLocation } from "@tanstack/react-router"
 import { cn } from "../../lib/utils"
 import { useState, useEffect, useRef } from "react"
@@ -116,168 +116,142 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
     )}>
       
       {/* 1. STORE SELECTOR & TOGGLE */}
-      <div className={cn("pt-4 pb-2 flex-shrink-0 relative", isCollapsed ? "px-0" : "px-3")}>
-        <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-between")}>
-          {isCollapsed ? (
-            <button 
-              onClick={(e) => { e.preventDefault(); toggleSidebar(); }}
-              className="relative flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] transition-colors group"
-            >
-              <div className="w-7 h-7 flex items-center justify-center bg-zinc-900 dark:bg-white/5 border border-transparent dark:border-white/10 rounded-md shadow-sm transition-opacity duration-200 group-hover:opacity-0 absolute">
-                <IdaLogo className="h-3" />
-              </div>
-              <PanelLeft className="w-4 h-4 text-zinc-400 opacity-0 transition-opacity duration-200 group-hover:opacity-100 absolute" strokeWidth={1.5} />
-            </button>
-          ) : (
-            <>
-              <button className="flex items-center gap-2 hover:bg-zinc-100 dark:hover:bg-[#27272A] rounded-md transition-colors p-1 ml-1">
-                <div className="w-7 h-7 flex items-center justify-center bg-zinc-900 dark:bg-white/5 border border-transparent dark:border-white/10 rounded-md shadow-sm">
-                   <IdaLogo className="h-3" />
-                </div>
-              </button>
+      {!isSettings && (
+        <div className={cn("pt-4 pb-2 flex-shrink-0 relative", isCollapsed ? "px-0" : "px-3")}>
+          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-between")}>
+            {isCollapsed ? (
               <button 
                 onClick={(e) => { e.preventDefault(); toggleSidebar(); }}
-                className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors mr-1"
+                className="relative flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] transition-colors group"
               >
-                <PanelLeft className="w-4 h-4" strokeWidth={1.5} />
+                <div className="w-7 h-7 flex items-center justify-center bg-zinc-900 dark:bg-white/5 border border-transparent dark:border-white/10 rounded-md shadow-sm transition-opacity duration-200 group-hover:opacity-0 absolute">
+                  <IdaLogo className="h-3" />
+                </div>
+                <PanelLeft className="w-4 h-4 text-zinc-400 opacity-0 transition-opacity duration-200 group-hover:opacity-100 absolute" strokeWidth={1.5} />
               </button>
-            </>
-          )}
+            ) : (
+              <>
+                <button className="flex items-center gap-2 hover:bg-zinc-100 dark:hover:bg-[#27272A] rounded-md transition-colors p-1 ml-1">
+                  <div className="w-7 h-7 flex items-center justify-center bg-zinc-900 dark:bg-white/5 border border-transparent dark:border-white/10 rounded-md shadow-sm">
+                     <IdaLogo className="h-3" />
+                  </div>
+                </button>
+                <button 
+                  onClick={(e) => { e.preventDefault(); toggleSidebar(); }}
+                  className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 dark:hover:bg-[#27272A] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors mr-1"
+                >
+                  <PanelLeft className="w-4 h-4" strokeWidth={1.5} />
+                </button>
+              </>
+            )}
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 mx-4 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
         </div>
-        <div className="absolute bottom-0 left-0 right-0 mx-4 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
-      </div>
+      )}
 
       {/* 2. MAIN NAVIGATION E WORKSPACE SWITCHER */}
       <div className={cn("flex-1 px-3 py-1 flex flex-col gap-0.5 custom-scrollbar", isCollapsed ? "overflow-visible" : "overflow-y-auto relative")}>
         
         {/* WORKSPACE SWITCHER DROPDOWN */}
-        <div className={cn("mt-1.5 relative w-full", isCollapsed && "flex justify-center")} ref={workspaceRef}>
-          <button 
-            onClick={(e) => { e.preventDefault(); setIsWorkspaceOpen(!isWorkspaceOpen); }}
-            className={cn(
-              "flex items-center justify-between w-full h-8 rounded-md text-zinc-900 dark:text-zinc-50 bg-zinc-50 dark:bg-[#27272A]/50 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-blue-500",
-              isCollapsed ? "justify-center w-8 mx-auto" : "px-2",
-              isWorkspaceOpen && "bg-zinc-100 dark:bg-[#27272A] border-zinc-200/60 dark:border-zinc-700"
-            )}
-          >
-            <div className={cn("flex items-center gap-2.5", isCollapsed && "gap-0")}>
-              <div className="size-5 rounded-md bg-red-600 flex items-center justify-center text-white shadow-inner shrink-0">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="size-3"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-              </div>
-              <span className={cn("text-[13px] font-medium text-zinc-900 dark:text-zinc-50 truncate", isCollapsed && "hidden")}>
-                Brembo S.p.A.
-              </span>
-            </div>
-            {!isCollapsed && (
-              <ChevronDown className={cn("w-4 h-4 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-transform shrink-0", isWorkspaceOpen && "rotate-180")} strokeWidth={1.5} />
-            )}
-          </button>
-
-          {/* MENU A TENDINA WORKSPACE - POSITION FIXED A SIDEBAR CHIUSA */}
-          {isWorkspaceOpen && (
-            <div className="absolute left-0 top-[calc(100%+8px)] z-[9999] w-[224px] rounded-xl bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 shadow-lg p-2 animate-in fade-in zoom-in-95 duration-100 flex flex-col gap-1">
-              <div className="flex items-center gap-3 p-1 mb-1">
-                <div className="size-10 rounded-lg bg-red-600 flex items-center justify-center text-white font-medium text-[16px] flex-shrink-0 shadow-inner">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="size-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[14px] font-semibold text-zinc-900 dark:text-zinc-50 truncate">Brembo S.p.A.</span>
-                  <span className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate">Free Plan • 2 members</span>
-                </div>
-              </div>
-              <div className="flex gap-1.5 px-1">
-                <Link to="/vendor/settings" onClick={() => setIsWorkspaceOpen(false)} className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors">
-                  <Settings className="size-3.5 shrink-0" strokeWidth={1.5} /> Impostazioni
-                </Link>
-                <button className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors">
-                  <UserPlus className="size-3.5 shrink-0" strokeWidth={1.5} /> Invita membri
-                </button>
-              </div>
-              <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
-              <div className="flex items-center justify-between p-2 rounded-lg bg-zinc-50 dark:bg-[#323236]">
-                <span className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
-                  <Zap className="size-4" fill="currentColor" strokeWidth={1.5} /> Passa a Pro
-                </span>
-                <button className="bg-[#4F46E5] hover:bg-[#4338CA] text-white px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors shadow-sm">
-                  Upgrade
-                </button>
-              </div>
-              <div className="flex flex-col gap-2.5 p-3 rounded-lg bg-zinc-50 dark:bg-[#323236] mt-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Crediti</span>
-                  <span className="text-[12px] text-zinc-500 dark:text-zinc-400 flex items-center gap-0.5 hover:text-zinc-300 cursor-pointer transition-colors">
-                    5 rimanenti <ChevronRight className="size-3" strokeWidth={1.5} />
-                  </span>
-                </div>
-                <div className="h-2.5 w-full bg-zinc-200 dark:bg-[#18181B] rounded-full overflow-hidden border border-transparent dark:border-zinc-700">
-                  <div className="h-full bg-[#2563EB] rounded-full w-[80%]" />
-                </div>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <div className="size-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400">I crediti si ricaricano a mezzanotte (UTC)</span>
-                </div>
-              </div>
-              <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
-              <div className="flex flex-col">
-                <span className="px-2 py-1 text-[11px] text-zinc-500 dark:text-zinc-400">Tutti i workspace</span>
-                <button className="flex items-center gap-2 w-full px-2 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 transition-colors text-left mt-0.5 group">
-                  <div className="size-5 rounded-md bg-red-600 flex items-center justify-center text-white font-medium text-[9px] shadow-inner shrink-0">
+        {!isSettings && (
+          <>
+            <div className={cn("mt-1.5 relative w-full", isCollapsed && "flex justify-center")} ref={workspaceRef}>
+              <button 
+                onClick={(e) => { e.preventDefault(); setIsWorkspaceOpen(!isWorkspaceOpen); }}
+                className={cn(
+                  "flex items-center justify-between w-full h-8 rounded-md text-zinc-900 dark:text-zinc-50 bg-zinc-50 dark:bg-[#27272A]/50 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent hover:border-zinc-200/60 dark:hover:border-zinc-700 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-blue-500",
+                  isCollapsed ? "justify-center w-8 mx-auto" : "px-2",
+                  isWorkspaceOpen && "bg-zinc-100 dark:bg-[#27272A] border-zinc-200/60 dark:border-zinc-700"
+                )}
+              >
+                <div className={cn("flex items-center gap-2.5", isCollapsed && "gap-0")}>
+                  <div className="size-5 rounded-md bg-red-600 flex items-center justify-center text-white shadow-inner shrink-0">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="size-3"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                   </div>
-                  <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100 truncate flex-1">Brembo S.p.A.</span>
-                  <span className="text-[9px] font-semibold bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 px-1.5 py-0.5 rounded-sm uppercase tracking-wider shrink-0">Free</span>
-                  <Check className="size-3.5 text-zinc-900 dark:text-zinc-100 shrink-0 ml-0.5" strokeWidth={1.5} />
-                </button>
-              </div>
-              <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
-              <div className="flex flex-col gap-0.5 pb-0.5">
-                <button className="flex items-center gap-3 px-2 py-1.5 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-[#323236] transition-colors text-left group">
-                  <div className="size-6 rounded-md bg-zinc-100 dark:bg-[#323236] border border-transparent dark:border-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm"><Plus className="size-3.5 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} /></div>
-                  <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">Crea nuovo workspace</span>
-                </button>
-                <button className="flex items-center gap-3 px-2 py-1.5 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-[#323236] transition-colors text-left group">
-                  <div className="size-6 rounded-md bg-zinc-100 dark:bg-[#323236] border border-transparent dark:border-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm"><Globe className="size-3.5 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} /></div>
-                  <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">Trova workspace</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+                  <span className={cn("text-[13px] font-medium text-zinc-900 dark:text-zinc-50 truncate", isCollapsed && "hidden")}>
+                    Brembo S.p.A.
+                  </span>
+                </div>
+                {!isCollapsed && (
+                  <ChevronDown className={cn("w-4 h-4 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-transform shrink-0", isWorkspaceOpen && "rotate-180")} strokeWidth={1.5} />
+                )}
+              </button>
 
-        <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
+              {/* MENU A TENDINA WORKSPACE - POSITION FIXED A SIDEBAR CHIUSA */}
+              {isWorkspaceOpen && (
+                <div className="absolute left-0 top-[calc(100%+8px)] z-[9999] w-[216px] rounded-md bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 shadow-lg p-2 animate-in fade-in zoom-in-95 duration-100 flex flex-col gap-1">
+                  <div className="flex items-center gap-3 p-1 mb-1">
+                    <div className="size-10 rounded-lg bg-red-600 flex items-center justify-center text-white font-medium text-[16px] flex-shrink-0 shadow-inner">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="size-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-[14px] font-semibold text-zinc-900 dark:text-zinc-50 truncate">Brembo S.p.A.</span>
+                      <span className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate">Free Plan • 2 members</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-1.5 px-0.5">
+                    <Link to="/vendor/settings" onClick={() => setIsWorkspaceOpen(false)} className="flex-1 flex items-center justify-center gap-1.5 px-1.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors whitespace-nowrap">
+                      <Settings className="size-3.5 shrink-0" strokeWidth={1.5} /> Impostazioni
+                    </Link>
+                    <button className="flex-1 flex items-center justify-center gap-1.5 px-1.5 py-1.5 rounded-md bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-[12px] font-medium text-zinc-700 dark:text-zinc-300 transition-colors whitespace-nowrap">
+                      <UserPlus className="size-3.5 shrink-0" strokeWidth={1.5} /> Invita
+                    </button>
+                  </div>
+                  <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-2" />
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-zinc-50 dark:bg-[#323236]">
+                    <span className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
+                      <Zap className="size-4" fill="currentColor" strokeWidth={1.5} /> Passa a Pro
+                    </span>
+                    <button className="bg-[#4F46E5] hover:bg-[#4338CA] text-white px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors shadow-sm">
+                      Upgrade
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
+          </>
+        )}
 
         {isSettings ? (
           /* NAVIGAZIONE IMPOSTAZIONI */
-          <div className="flex flex-col gap-6 mt-1">
-            <Link to="/vendor" className="flex items-center gap-2 px-2 text-[13px] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors mb-2 group relative">
-              <ChevronLeft className="size-4" strokeWidth={1.5} />
-              <span className={cn(isCollapsed && "hidden")}>Torna alla Dashboard</span>
-              {isCollapsed && (
-                <span className={tooltipClasses}>Torna alla Dashboard</span>
-              )}
-            </Link>
-            <div className={cn(isCollapsed && "hidden")}>
-              <div className="flex items-center justify-between px-2 mb-1">
-                <span className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400">Impostazioni</span>
-              </div>
-              <div className="flex flex-col gap-0.5">
-                {[
-                  { title: "Negozio", path: "/vendor/settings" },
-                  { title: "Team", path: "/vendor/settings/team" },
-                  { title: "Tipi di Prodotto", path: "/vendor/settings/product-types" },
-                  { title: "Tag Prodotto", path: "/vendor/settings/product-tags" },
-                  { title: "Sedi e Spedizioni", path: "/vendor/settings/locations" }
-                ].map(item => (
-                  <Link key={item.title} to={item.path} className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === item.path ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#27272A]")}>{item.title}</Link>
-                ))}
-              </div>
+          <div className="flex flex-col h-full">
+            {/* Nuovo Header "Torna alla Dashboard" */}
+            <div className="pt-4 pb-2 px-3 flex-shrink-0">
+              <Link to="/vendor" className="flex items-center gap-2.5 px-2 py-1.5 text-[13px] font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors group">
+                <CornerUpLeft className="w-4 h-4 text-zinc-400 group-hover:text-zinc-500 dark:group-hover:text-zinc-300 transition-colors" strokeWidth={2} />
+                Impostazioni
+              </Link>
             </div>
-            <div className={cn(isCollapsed && "hidden")}>
-              <div className="flex items-center justify-between px-2 mb-1">
-                <span className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400">Il Mio Account</span>
+            
+            {/* Voci di Menu Impostazioni */}
+            <div className="flex-1 px-3 py-1 flex flex-col gap-6 overflow-y-auto custom-scrollbar">
+              <div>
+                <div className="flex items-center justify-between px-2 mb-1 mt-2">
+                  <span className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400">Generale</span>
+                  <span className="text-[12px] text-zinc-400">—</span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  {[
+                    { title: "Store", path: "/vendor/settings" },
+                    { title: "Team", path: "/vendor/settings/team" },
+                    { title: "Tipi di prodotto", path: "/vendor/settings/product-types" },
+                    { title: "Tag prodotto", path: "/vendor/settings/product-tags" },
+                    { title: "Sedi e spedizioni", path: "/vendor/settings/locations" }
+                  ].map(item => (
+                    <Link key={item.title} to={item.path} className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === item.path ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#323236]")}>{item.title}</Link>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-col gap-0.5">
-                <Link to="/vendor/settings/profile" className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === "/vendor/settings/profile" ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#27272A]")}>Profilo</Link>
+              <div>
+                <div className="flex items-center justify-between px-2 mb-1">
+                  <span className="text-[12px] font-medium text-zinc-500 dark:text-zinc-400">Il Mio Account</span>
+                  <span className="text-[12px] text-zinc-400">—</span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <Link to="/vendor/settings/profile" className={cn("px-2 py-1.5 text-[13px] rounded-md transition-colors", location.pathname === "/vendor/settings/profile" ? "bg-zinc-100 dark:bg-[#27272A] text-zinc-900 dark:text-zinc-50 font-medium" : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#323236]")}>Profilo</Link>
+                </div>
               </div>
             </div>
           </div>
@@ -363,28 +337,25 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
             
             <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
             
-            <Link to="/vendor/connect" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "w-full px-2 py-1.5 text-[13px]")}>
+            <Link to="/vendor/apps" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0 mb-1" : "w-full px-2 py-1.5 text-[13px]")}>
               <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-                <Box className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-                <span className={cn(isCollapsed && "hidden")}>Ida Connect</span>
+                <LayoutGrid className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
+                <span className={cn(isCollapsed && "hidden")}>Ida App & Servizi</span>
               </div>
               {isCollapsed && (
-                <span className={tooltipClasses}>Ida Connect</span>
+                <span className={tooltipClasses}>Ida App & Servizi</span>
               )}
             </Link>
             
             <div className="mx-1 my-2 border-b border-dotted border-zinc-300 dark:border-zinc-700" />
 
-            <Link to="/vendor/extensions" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0" : "justify-between w-full px-2 py-1.5 text-[13px]")}>
+            <Link to="/vendor/integrations" onClick={() => setOpenMenu("")} className={cn("flex items-center transition-all rounded-md group text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-[#27272A] border border-transparent relative", isCollapsed ? "justify-center w-8 h-8 mx-auto p-0" : "w-full px-2 py-1.5 text-[13px]")}>
               <div className={cn("flex items-center", !isCollapsed && "gap-2.5")}>
-                <Puzzle className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
-                <span className={cn(isCollapsed && "hidden")}>Estensioni</span>
+                <Plug className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />
+                <span className={cn(isCollapsed && "hidden")}>Integrazioni</span>
               </div>
-              {!isCollapsed && (
-                 <ChevronDown className="w-4 h-4 text-zinc-400 group-hover:text-zinc-500 transition-transform" strokeWidth={1.5} />
-              )}
               {isCollapsed && (
-                <span className={tooltipClasses}>Estensioni</span>
+                <span className={tooltipClasses}>Integrazioni</span>
               )}
             </Link>
           </>
@@ -407,7 +378,7 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
         {/* Wrapper flessibile per Avatar e Inbox */}
         <div className={cn("flex w-full relative", isCollapsed ? "flex-col items-center gap-3" : "items-center justify-between px-1")} ref={userMenuRef}>
           
-          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "justify-start w-full px-1")}>
+          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "w-full justify-start")}>
             <button 
               onClick={(e) => { e.preventDefault(); setIsUserMenuOpen(!isUserMenuOpen); }}
               className="flex items-center justify-center rounded-full hover:ring-2 hover:ring-zinc-200 dark:hover:ring-zinc-700 transition-all outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
@@ -420,7 +391,7 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
 
           {/* MENU A TENDINA UTENTE - POSITION FIXED A SIDEBAR CHIUSA */}
           {isUserMenuOpen && (
-             <div className="absolute left-0 bottom-[calc(100%+8px)] z-[9999] w-[224px] rounded-xl bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 shadow-lg p-1.5 animate-in fade-in zoom-in-95 duration-100 flex flex-col overflow-hidden">
+             <div className="absolute left-0 bottom-[calc(100%+8px)] z-[9999] w-[216px] rounded-md bg-white dark:bg-[#27272A] border border-zinc-200 dark:border-zinc-700 shadow-lg p-1.5 animate-in fade-in zoom-in-95 duration-100 flex flex-col overflow-hidden">
                
                {/* Vista Principale del Menu */}
                {userMenuView === 'main' ? (
@@ -437,16 +408,9 @@ export function VendorSidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boo
                    <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-1 -mx-1.5" />
                    
                    <div className="flex flex-col gap-0.5">
-                     <a className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]" href="/profile">
+                     <Link to="/vendor/settings/profile" onClick={() => setIsUserMenuOpen(false)} className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]">
                        <UserPlus className="size-4 shrink-0" strokeWidth={1.5} />
                        <span>Profilo</span>
-                     </a>
-                     <Link to="/vendor/settings/profile" onClick={() => setIsUserMenuOpen(false)} className="relative flex cursor-pointer select-none items-center rounded-md text-[13px] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 outline-none transition-colors gap-2.5 px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-[#323236]">
-                       <Settings className="size-4 shrink-0" strokeWidth={1.5} />
-                       <span>Impostazioni</span>
-                       <span className="ml-auto hidden sm:flex">
-                         <kbd className="inline-flex min-w-4 items-center justify-center gap-0.5 rounded border font-sans text-[10px] leading-none border-transparent bg-zinc-200/50 dark:bg-[#18181B] p-0.5 opacity-60 px-1">⌘.</kbd>
-                       </span>
                      </Link>
                      <button 
                        onClick={() => setUserMenuView('appearance')}

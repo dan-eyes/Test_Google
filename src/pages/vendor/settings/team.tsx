@@ -22,7 +22,7 @@ export function VendorSettingsTeam() {
             <button className="bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50 dark:bg-transparent dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-[#323236] text-[13px] font-medium px-2 py-1.5 rounded-md transition-colors shadow-sm flex items-center justify-center">
               <ListFilter className="size-4" strokeWidth={1.5} />
             </button>
-            <button className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 text-[13px] font-medium px-4 py-1.5 rounded-md shadow-sm transition-colors ml-1">
+            <button className="bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors text-[13px] font-medium px-4 py-1.5 rounded-md ml-1">
               Invita
             </button>
           </div>

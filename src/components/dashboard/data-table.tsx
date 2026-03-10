@@ -108,7 +108,7 @@ export function DataTable<T extends { id: string | number }>({
             </div>
             <button 
               onClick={onFilter}
-              className="h-8 px-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-md text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors flex items-center gap-2"
+              className="bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50 shadow-sm dark:bg-transparent dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-white/5 transition-colors text-[13px] font-medium h-8 px-3 rounded-md flex items-center gap-2"
             >
               <Filter className="w-3.5 h-3.5" />
               Filter
